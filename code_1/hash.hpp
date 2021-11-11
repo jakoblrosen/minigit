@@ -4,26 +4,26 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
 
-struct  HashNode //hash node datastructure
+struct HashNode // hash node datastructure
 {
     string key;
     vector<int> commitNums;
-    struct HashNode* next;
+    struct HashNode *next;
 };
 
 class HashTable
 {
-    int tableSize;  // No. of buckets (linked lists)
+    int tableSize; // No. of buckets (linked lists)
 
     // Pointer to an array containing buckets
-     HashNode* *table;
+    HashNode **table;
 
-     HashNode* createNode(string key, HashNode* next);
+    HashNode *createNode(string key, HashNode *next);
+
 public:
-    HashTable(int bsize);  // Constructor
+    HashTable(int bsize); // Constructor
 
     // inserts a key into hash table
     bool insertItem(string key, int num);
@@ -33,7 +33,7 @@ public:
 
     void printTable();
 
-    HashNode* searchItem(string key);
+    HashNode *searchItem(string key);
 };
 
 #endif
