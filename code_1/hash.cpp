@@ -6,36 +6,98 @@ using namespace std;
 
 HashNode *HashTable::createNode(string key, HashNode *next)
 {
-    HashNode *nw = NULL;
+    HashNode *nw = nullptr;
     return nw;
 }
 
 HashTable::HashTable(int bsize)
 {
+    // intialize variable for underlying data structure
+    table = new HashNode *;
+    *table = new HashNode[bsize];
+    tableSize = bsize;
+
+    // initialize variables for hash function
+    reset(digest, buffer, transforms);
 }
 
 // function to calculate hash function
-unsigned int HashTable::hashFunction(string s)
+// implementation of SHA-1 hash function
+string HashTable::hashFunction(string s)
 {
+    istringstream is(s);
 
-    return 0;
+    while (true)
+    {
+        char sbuf[BLOCK_BYTES];
+        is.read(sbuf, BLOCK_BYTES - buffer.size());
+        buffer.append(sbuf, (size_t)is.gcount());
+        if (buffer.size() != BLOCK_BYTES)
+        {
+            break;
+        }
+        uint32_t block[BLOCK_INTS];
+        buffer_to_block(buffer, block);
+        transform(digest, block, transforms);
+        buffer.clear();
+    }
+
+    // total number of hashed bits
+    uint64_t total_bits = (transforms * BLOCK_BYTES + buffer.size()) * 8;
+
+    // padding
+    buffer += (char)0x80;
+    size_t orig_size = buffer.size();
+    while (buffer.size() < BLOCK_BYTES)
+    {
+        buffer += (char)0x00;
+    }
+
+    uint32_t block[BLOCK_INTS];
+    buffer_to_block(buffer, block);
+
+    if (orig_size > BLOCK_BYTES - 8)
+    {
+        transform(digest, block, transforms);
+        for (size_t i = 0; i < BLOCK_INTS - 2; i++)
+        {
+            block[i] = 0;
+        }
+    }
+
+    // append total_bits, split this uint64_t into two uint32_t
+    block[BLOCK_INTS - 1] = (uint32_t)total_bits;
+    block[BLOCK_INTS - 2] = (uint32_t)(total_bits >> 32);
+    transform(digest, block, transforms);
+
+    ostringstream result;
+    for (size_t i = 0; i < sizeof(digest) / sizeof(digest[0]); i++)
+    {
+        result << hex << setfill('0') << setw(8);
+        result << digest[i];
+    }
+
+    // reset for next run 
+    reset(digest, buffer, transforms);
+
+    return result.str();
 }
 
-// TODO Complete this function
 // function to search
 HashNode *HashTable::searchItem(string key)
 {
+    string hash = hashFunction(key);
 
-    // TODO
-    return NULL;
+    return nullptr;
 }
 
-// TODO Complete this function
 // function to insert
 bool HashTable::insertItem(string key, int cNum)
 {
+    // get base hash from key
+    string hash = hashFunction(key);
+    // TODO convert string hash into int index
 
-    // TODO
     return false;
 }
 

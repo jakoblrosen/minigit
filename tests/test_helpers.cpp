@@ -35,18 +35,24 @@ std::string readFileIntoString(std::string fileName)
     return out;
 }
 
-string test_insert(string arr[], int len, int tabSize)
+string test_hash(string key)
 {
+    HashTable *table = new HashTable(0);
 
+    return table->hashFunction(key);
+}
+
+string test_insert(string arr[], int len, int tableSize)
+{
     testing::internal::CaptureStdout();
-    HashTable *ht = new HashTable(tabSize);
+    HashTable *table = new HashTable(tableSize);
 
     for (int i = 0; i < len; i++)
     {
-        ht->insertItem(arr[i], i);
+        table->insertItem(arr[i], i);
     }
 
-    ht->printTable();
+    table->printTable();
     string output = testing::internal::GetCapturedStdout();
     return output;
 }

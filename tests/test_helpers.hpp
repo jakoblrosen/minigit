@@ -12,5 +12,6 @@ using namespace std;
 // TODO add detailed explanation on what the function should do
 std::string exec(const char *cmd);
 std::string readFileIntoString(std::string fileName);
+string test_hash(string key);
 string test_insert(string arr[], int len, int tabSize);
 #endif // TEST_H__

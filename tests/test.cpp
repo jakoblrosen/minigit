@@ -76,18 +76,84 @@ double test_x::max_grade = 100;
 // Tests start here
 /////////////////////////////////////////
 
+TEST_F(test_x, TestHash)
+{
+	string key;
+	string result;
+	string expected;
+
+
+	key = "abc";
+
+	result = test_hash(key);
+
+	expected = "a9993e364706816aba3e25717850c26c9cd0d89d";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+
+
+	key = "abcdef";
+
+	result = test_hash(key);
+
+	expected = "1f8ac10f23c5b5bc1167bda84b833e5c057a77d2";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+
+
+	key = "abcdefghijklmnopqrstuvwxyzZYXWVUTSRQPONMLKJIHGFEDCBA";
+
+	result = test_hash(key);
+
+	expected = "77852a3e9b97c65c9bafe5e688ea1d19d69ea25d";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+
+
+	key = "The quick brown fox jumps over the lazy dog";
+
+	result = test_hash(key);
+
+	expected = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+
+	
+	key = "The quick brown fox jumps over the lazy cog";
+
+	result = test_hash(key);
+
+	expected = "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+
+
+	key = "";
+
+	result = test_hash(key);
+
+	expected = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(1);
+}
+
 TEST_F(test_x, TestInsert)
 {
-
 	string result;
 	string expected;
 
 	int len = 5;
 
 	string commits[] = {"computer", "science", "fun", "difficult", "science"};
-	int tabSize = 5;
+	int tableSize = 5;
 
-	result = test_insert(commits, len, tabSize);
+	result = test_insert(commits, len, tableSize);
 
 	expected = "0|| science(1,4,)\n1|| \n2|| \n3|| \n4|| difficult(3,)-->fun(2,)-->computer(0,)\n";
 
