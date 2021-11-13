@@ -22,6 +22,23 @@ HashTable::HashTable(int bsize)
     reset(digest, buffer, transforms);
 }
 
+HashTable::~HashTable()
+{
+    for (int i = 0; i < tableSize; i++)
+    {
+        if (table[i] != nullptr)
+        {
+            HashNode *currNode = table[i];
+            while (currNode != nullptr)
+            {
+                HashNode *toDelete = currNode;
+                currNode = currNode->next;
+                delete toDelete;
+            }
+        }
+    }
+}
+
 // function to calculate hash function
 // implementation of SHA-1 hash function from https://github.com/vog/sha1
 string HashTable::hashFunction(string s)
@@ -109,9 +126,16 @@ HashNode *HashTable::searchItem(string key)
     unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
 
     HashNode *currNode = table[index];
-    while (currNode != nullptr && currNode->key != key)
+    while (currNode != nullptr)
     {
-        currNode = currNode->next;
+        if (currNode->key == key)
+        {
+            break;
+        }
+        else
+        {
+            currNode = currNode->next;
+        }
     }
 
     return currNode;

@@ -212,6 +212,7 @@ private:
 
 public:
     HashTable(int bsize); // Constructor
+    ~HashTable();
 
     // hash function to map values to key
     string hashFunction(string key);
