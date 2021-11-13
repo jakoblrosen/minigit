@@ -126,16 +126,9 @@ HashNode *HashTable::searchItem(string key)
     unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
 
     HashNode *currNode = table[index];
-    while (currNode != nullptr)
+    while (currNode != nullptr && key != currNode->key)
     {
-        if (currNode->key == key)
-        {
-            break;
-        }
-        else
-        {
-            currNode = currNode->next;
-        }
+        currNode = currNode->next;
     }
 
     return currNode;
