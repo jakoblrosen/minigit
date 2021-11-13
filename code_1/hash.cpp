@@ -6,15 +6,16 @@ using namespace std;
 
 HashNode *HashTable::createNode(string key, HashNode *next)
 {
-    HashNode *nw = nullptr;
-    return nw;
+    HashNode *node = new HashNode;
+    node->key = key;
+    node->next = next;
+    return node;
 }
 
 HashTable::HashTable(int bsize)
 {
     // intialize variable for underlying data structure
-    table = new HashNode *;
-    *table = new HashNode[bsize];
+    table = new HashNode *[bsize];
     tableSize = bsize;
 
     // initialize variables for hash function
@@ -22,7 +23,7 @@ HashTable::HashTable(int bsize)
 }
 
 // function to calculate hash function
-// implementation of SHA-1 hash function
+// implementation of SHA-1 hash function from https://github.com/vog/sha1
 string HashTable::hashFunction(string s)
 {
     istringstream is(s);
@@ -77,7 +78,7 @@ string HashTable::hashFunction(string s)
         result << digest[i];
     }
 
-    // reset for next run 
+    // reset for next run
     reset(digest, buffer, transforms);
 
     return result.str();
@@ -86,9 +87,34 @@ string HashTable::hashFunction(string s)
 // function to search
 HashNode *HashTable::searchItem(string key)
 {
+    // get base hash from key
     string hash = hashFunction(key);
 
-    return nullptr;
+    // split 20 byte hash into 5 4 byte sub hashes
+    string sub_hash[5];
+    sub_hash[0] = hash.substr(0, 8);
+    sub_hash[1] = hash.substr(8, 8);
+    sub_hash[2] = hash.substr(16, 8);
+    sub_hash[3] = hash.substr(24, 8);
+    sub_hash[4] = hash.substr(32, 8);
+
+    int start = key.length() % 5;
+    string final_hash = "";
+    for (int i = 0; i < 8; i++)
+    {
+        final_hash.push_back(sub_hash[(start + i) % 5].at(i));
+    }
+
+    // convert hexadecimal hash into decimal int
+    unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
+
+    HashNode *currNode = table[index];
+    while (currNode != nullptr && currNode->key != key)
+    {
+        currNode = currNode->next;
+    }
+
+    return currNode;
 }
 
 // function to insert
@@ -96,9 +122,39 @@ bool HashTable::insertItem(string key, int cNum)
 {
     // get base hash from key
     string hash = hashFunction(key);
-    // TODO convert string hash into int index
 
-    return false;
+    // split 20 byte hash into 5 8 byte sub hashes
+    string sub_hash[5];
+    sub_hash[0] = hash.substr(0, 8);
+    sub_hash[1] = hash.substr(8, 8);
+    sub_hash[2] = hash.substr(16, 8);
+    sub_hash[3] = hash.substr(24, 8);
+    sub_hash[4] = hash.substr(32, 8);
+
+    int start = key.length() % 5;
+    string final_hash = "";
+    for (int i = 0; i < 8; i++)
+    {
+        final_hash.push_back(sub_hash[(start + i) % 5][i]);
+    }
+
+    // convert hexadecimal hash into decimal int
+    unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
+
+    // check if key already exists in table or not
+    if (searchItem(key) == nullptr)
+    {
+        table[index] = createNode(key, table[index]);
+        table[index]->commitNums.push_back(cNum);
+
+        return true;
+    }
+    else
+    {
+        searchItem(key)->commitNums.push_back(cNum);
+
+        return false;
+    }
 }
 
 // function to display hash table //
@@ -116,4 +172,31 @@ bool HashTable::insertItem(string key, int cNum)
 */
 void HashTable::printTable()
 {
+    HashNode *currNode = nullptr;
+    for (int i = 0; i < tableSize; i++)
+    {
+        cout << i << "|| ";
+
+        currNode = table[i];
+        while (currNode != nullptr)
+        {
+            cout << currNode->key << "(";
+
+            for (int j = 0; j < currNode->commitNums.size(); j++)
+            {
+                cout << currNode->commitNums[j] << ",";
+            }
+
+            cout << ")";
+
+            if (currNode->next != nullptr)
+            {
+                cout << "-->";
+            }
+
+            currNode = currNode->next;
+        }
+
+        cout << endl;
+    }
 }

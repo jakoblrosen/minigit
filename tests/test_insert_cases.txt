@@ -1,0 +1,325 @@
+TEST INSERT CASE 1
+
+
+“computer”
+c60266a8adad2f8ee67d793b4fd3fd0ffd73cc61
+blocks:
+        c60266a8
+        adad2f8e
+        e67d793b
+        4fd3fd0f
+        fd73cc61
+final hash:
+        4d0d7d68
+to int:
+        1292729704
+to index (out of 5):
+        4
+
+
+"science"
+b92336a2fb8af63134be9c68453435623f2f5747
+blocks:
+        b92336a2
+        fb8af631
+        34be9c68
+        45343562
+        3f2f5747
+final hash:
+        3523fc67
+to int:
+        891550823
+to index (out of 5):
+        3
+
+
+"fun"
+c84c50d5a767a23bda0ea5ca348fed54c6db9aab
+blocks:
+        c84c50d5
+        a767a23b
+        da0ea5ca
+        348fed54
+        c6db9aab
+final hash:
+        3647ada5
+to int:
+        910667173
+to index (out of 5):
+        3
+
+
+"difficult"
+d2a26f03aa5a723edc8f716f82e1c12db45074d6
+blocks:
+        d2a26f03
+        aa5a723e
+        dc8f716f
+        82e1c12d
+        b45074d6
+final hash:
+        b25fc40e
+to int:
+        2992620558
+to index (out of 5):
+        3
+
+
+test 1 output:
+
+
+0|| 
+1|| 
+2|| 
+3|| difficult(3,)-->fun(2,)-->science(1,4,)
+4|| computer(0,)
+
+
+literal string:
+"0|| \n1|| \n2|| \n3|| difficult(3,)-->fun(2,)-->science(1,4,)\n4|| computer(0,)\n"
+
+
+
+
+TEST INSERT CASE 2
+
+
+"git"
+46f1a0bd5592a2f9244ca321b129902a06b53e03
+blocks:
+        46f1a0bd
+        5592a2f9
+        244ca321
+        b129902a
+        06b53e03
+final hash:
+        b6f2a00d
+to int:
+        3069353997
+to index (out of 10):
+        7
+
+
+"hash"
+2346ad27d7568ba9896f1b7da6b5991251debdf2
+blocks:
+        2346ad27
+        d7568ba9
+        896f1b7d
+        a6b59912
+        51debdf2
+final hash:
+        535f9d29
+to int:
+        1398775081
+to index (out of 10):
+        1
+
+
+"data"
+a17c9aaa61e80a1bf71d0d850af4e5baa9800bbd
+blocks:
+        a17c9aaa
+        61e80a1b
+        f71d0d85
+        0af4e5ba
+        a9800bbd
+final hash:
+        a1edebab
+to int:
+        2716724139
+to index (out of 10):
+        9
+
+
+"coding"
+ab43a7c9cb5b2380afc4ddf8b3e2583169b39a02
+blocks:
+        ab43a7c9
+        cb5b2380
+        afc4ddf8
+        b3e25831
+        69b39a02
+final hash:
+        cfe3a3f1
+to int:
+        3487802353
+to index (out of 10):
+        3
+
+
+test 2 output:
+
+
+0|| 
+1|| hash(1,)
+2|| 
+3|| coding(4,)
+4|| 
+5|| 
+6|| 
+7|| git(0,)
+8|| 
+9|| data(2,3,)
+
+
+literal string:
+"0|| \n1|| hash(1,)\n2|| \n3|| coding(4,)\n4|| \n5|| \n6|| \n7|| git(0,)\n8|| \n9|| data(2,3,)\n"
+
+
+
+
+TEST INSERT CASE 3
+
+
+“computer”
+c60266a8adad2f8ee67d793b4fd3fd0ffd73cc61
+blocks:
+        c60266a8
+        adad2f8e
+        e67d793b
+        4fd3fd0f
+        fd73cc61
+final hash:
+        4d0d7d68
+to int:
+        1292729704
+to index (out of 15):
+        4
+
+
+"science"
+b92336a2fb8af63134be9c68453435623f2f5747
+blocks:
+        b92336a2
+        fb8af631
+        34be9c68
+        45343562
+        3f2f5747
+final hash:
+        3523fc67
+to int:
+        891550823
+to index (out of 15):
+        8
+
+
+"fun"
+c84c50d5a767a23bda0ea5ca348fed54c6db9aab
+blocks:
+        c84c50d5
+        a767a23b
+        da0ea5ca
+        348fed54
+        c6db9aab
+final hash:
+        3647ada5
+to int:
+        910667173
+to index (out of 5):
+        13
+
+
+"difficult"
+d2a26f03aa5a723edc8f716f82e1c12db45074d6
+blocks:
+        d2a26f03
+        aa5a723e
+        dc8f716f
+        82e1c12d
+        b45074d6
+final hash:
+        b25fc40e
+to int:
+        2992620558
+to index (out of 5):
+        3
+
+
+"git"
+46f1a0bd5592a2f9244ca321b129902a06b53e03
+blocks:
+        46f1a0bd
+        5592a2f9
+        244ca321
+        b129902a
+        06b53e03
+final hash:
+        b6f2a00d
+to int:
+        3069353997
+to index (out of 15):
+        12
+
+
+"hash"
+2346ad27d7568ba9896f1b7da6b5991251debdf2
+blocks:
+        2346ad27
+        d7568ba9
+        896f1b7d
+        a6b59912
+        51debdf2
+final hash:
+        535f9d29
+to int:
+        1398775081
+to index (out of 15):
+        1
+
+
+"data"
+a17c9aaa61e80a1bf71d0d850af4e5baa9800bbd
+blocks:
+        a17c9aaa
+        61e80a1b
+        f71d0d85
+        0af4e5ba
+        a9800bbd
+final hash:
+        a1edebab
+to int:
+        2716724139
+to index (out of 15):
+        9
+
+
+"coding"
+ab43a7c9cb5b2380afc4ddf8b3e2583169b39a02
+blocks:
+        ab43a7c9
+        cb5b2380
+        afc4ddf8
+        b3e25831
+        69b39a02
+final hash:
+        cfe3a3f1
+to int:
+        3487802353
+to index (out of 15):
+        13
+
+
+test 3 output:
+
+
+0|| 
+1|| hash(6,)
+2|| 
+3|| difficult(3,)
+4|| computer(0,)
+5|| 
+6|| 
+7|| 
+8|| science(1,4,)
+9|| data(7,8,)
+10|| 
+11|| 
+12|| git(5,)
+13|| coding(9,)-->fun(2,)
+14|| 
+
+
+literal string:
+"0|| \n1|| hash(6,)\n2|| \n3|| difficult(3,)\n4|| computer(0,)\n5|| \n6|| \n7|| \n8|| science(1,4,)\n9|| data(7,8,)\n10|| \n11|| \n12|| git(5,)\n13|| coding(9,)-->fun(2,)\n14|| \n"
+

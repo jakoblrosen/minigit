@@ -147,18 +147,44 @@ TEST_F(test_x, TestInsert)
 {
 	string result;
 	string expected;
+	int len;
+	int tableSize;
 
-	int len = 5;
 
-	string commits[] = {"computer", "science", "fun", "difficult", "science"};
-	int tableSize = 5;
+	string commits_1[] = {"computer", "science", "fun", "difficult", "science"};
+	len = 5;
+	tableSize = 5;
 
-	result = test_insert(commits, len, tableSize);
+	result = test_insert(commits_1, len, tableSize);
 
-	expected = "0|| science(1,4,)\n1|| \n2|| \n3|| \n4|| difficult(3,)-->fun(2,)-->computer(0,)\n";
+	expected = "0|| \n1|| \n2|| \n3|| difficult(3,)-->fun(2,)-->science(1,4,)\n4|| computer(0,)\n";
 
 	ASSERT_EQ(expected, result);
-	add_points_to_grade(6);
+	add_points_to_grade(2);
+
+
+	string commits_2[] = {"git", "hash", "data", "data", "coding"};
+	len = 5;
+	tableSize = 10;
+
+	result = test_insert(commits_2, len, tableSize);
+
+	expected = "0|| \n1|| hash(1,)\n2|| \n3|| coding(4,)\n4|| \n5|| \n6|| \n7|| git(0,)\n8|| \n9|| data(2,3,)\n";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(2);
+
+
+	string commits_3[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
+	len = 10;
+	tableSize = 15;
+
+	result = test_insert(commits_3, len, tableSize);
+
+	expected = "0|| \n1|| hash(6,)\n2|| \n3|| difficult(3,)\n4|| computer(0,)\n5|| \n6|| \n7|| \n8|| science(1,4,)\n9|| data(7,8,)\n10|| \n11|| \n12|| git(5,)\n13|| coding(9,)-->fun(2,)\n14|| \n";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(2);
 }
 
 // TODO add more tests for insert. Design tests for search from hashTable.

@@ -27,6 +27,8 @@ private:
 
     HashNode *createNode(string key, HashNode *next);
 
+    // SHA-1 implementation from https://github.com/vog/sha1
+
     // private member variables for SHA-1 hash
     uint32_t digest[5];
     string buffer;
@@ -211,11 +213,11 @@ private:
 public:
     HashTable(int bsize); // Constructor
 
-    // inserts a key into hash table
-    bool insertItem(string key, int num);
-
     // hash function to map values to key
     string hashFunction(string key);
+
+    // inserts a key into hash table
+    bool insertItem(string key, int num);
 
     void printTable();
 
