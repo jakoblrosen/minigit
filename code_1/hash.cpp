@@ -194,7 +194,7 @@ void HashTable::printTable()
         {
             cout << currNode->key << "(";
 
-            for (int j = 0; j < currNode->commitNums.size(); j++)
+            for (unsigned int j = 0; j < currNode->commitNums.size(); j++)
             {
                 cout << currNode->commitNums[j] << ",";
             }
