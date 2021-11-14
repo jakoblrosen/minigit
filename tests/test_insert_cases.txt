@@ -10,11 +10,11 @@ blocks:
         4fd3fd0f
         fd73cc61
 final hash:
-        4d0d7d68
+        4fd3fd0f
 to int:
-        1292729704
+        1339292943
 to index (out of 5):
-        4
+        3
 
 
 "science"
@@ -26,11 +26,11 @@ blocks:
         45343562
         3f2f5747
 final hash:
-        3523fc67
+        34be9c68
 to int:
-        891550823
+        884907112
 to index (out of 5):
-        3
+        2
 
 
 "fun"
@@ -42,11 +42,11 @@ blocks:
         348fed54
         c6db9aab
 final hash:
-        3647ada5
+        348fed54
 to int:
-        910667173
+        881847636
 to index (out of 5):
-        3
+        1
 
 
 "difficult"
@@ -58,25 +58,25 @@ blocks:
         82e1c12d
         b45074d6
 final hash:
-        b25fc40e
+        b45074d6
 to int:
-        2992620558
+        3025171670
 to index (out of 5):
-        3
+        0
 
 
 test 1 output:
 
 
-0|| 
-1|| 
-2|| 
-3|| difficult(3,)-->fun(2,)-->science(1,4,)
-4|| computer(0,)
+0|| difficult(3,)
+1|| fun(2,)
+2|| science(1,4,)
+3|| computer(0,)
+4|| 
 
 
 literal string:
-"0|| \n1|| \n2|| \n3|| difficult(3,)-->fun(2,)-->science(1,4,)\n4|| computer(0,)\n"
+"0|| difficult(3,)\n1|| fun(2,)\n2|| science(1,4,)\n3|| computer(0,)\n4|| \n"
 
 
 
@@ -93,11 +93,11 @@ blocks:
         b129902a
         06b53e03
 final hash:
-        b6f2a00d
+        b129902a
 to int:
-        3069353997
+        2972291114
 to index (out of 10):
-        7
+        4
 
 
 "hash"
@@ -109,11 +109,11 @@ blocks:
         a6b59912
         51debdf2
 final hash:
-        535f9d29
+        51debdf2
 to int:
-        1398775081
+        1373552114
 to index (out of 10):
-        1
+        4
 
 
 "data"
@@ -125,11 +125,11 @@ blocks:
         0af4e5ba
         a9800bbd
 final hash:
-        a1edebab
+        a9800bbd
 to int:
-        2716724139
+        2843741117
 to index (out of 10):
-        9
+        7
 
 
 "coding"
@@ -141,30 +141,30 @@ blocks:
         b3e25831
         69b39a02
 final hash:
-        cfe3a3f1
+        cb5b2380
 to int:
-        3487802353
+        3411747712
 to index (out of 10):
-        3
+        2
 
 
 test 2 output:
 
 
 0|| 
-1|| hash(1,)
-2|| 
-3|| coding(4,)
-4|| 
+1|| 
+2|| coding(4,)
+3|| 
+4|| hash(1,)-->git(0,)
 5|| 
 6|| 
-7|| git(0,)
+7|| data(2,3,)
 8|| 
-9|| data(2,3,)
+9|| 
 
 
 literal string:
-"0|| \n1|| hash(1,)\n2|| \n3|| coding(4,)\n4|| \n5|| \n6|| \n7|| git(0,)\n8|| \n9|| data(2,3,)\n"
+"0|| \n1|| \n2|| coding(4,)\n3|| \n4|| hash(1,)-->git(0,)\n5|| \n6|| \n7|| data(2,3,)\n8|| \n9|| \n"
 
 
 
@@ -181,11 +181,11 @@ blocks:
         4fd3fd0f
         fd73cc61
 final hash:
-        4d0d7d68
+        4fd3fd0f
 to int:
-        1292729704
+        1339292943
 to index (out of 15):
-        4
+        3
 
 
 "science"
@@ -197,11 +197,11 @@ blocks:
         45343562
         3f2f5747
 final hash:
-        3523fc67
+        34be9c68
 to int:
-        891550823
+        884907112
 to index (out of 15):
-        8
+        7
 
 
 "fun"
@@ -213,11 +213,11 @@ blocks:
         348fed54
         c6db9aab
 final hash:
-        3647ada5
+        348fed54
 to int:
-        910667173
-to index (out of 5):
-        13
+        881847636
+to index (out of 15):
+        6
 
 
 "difficult"
@@ -229,11 +229,11 @@ blocks:
         82e1c12d
         b45074d6
 final hash:
-        b25fc40e
+        b45074d6
 to int:
-        2992620558
-to index (out of 5):
-        3
+        3025171670
+to index (out of 15):
+        5
 
 
 "git"
@@ -245,11 +245,11 @@ blocks:
         b129902a
         06b53e03
 final hash:
-        b6f2a00d
+        b129902a
 to int:
-        3069353997
+        2972291114
 to index (out of 15):
-        12
+        14
 
 
 "hash"
@@ -261,11 +261,11 @@ blocks:
         a6b59912
         51debdf2
 final hash:
-        535f9d29
+        51debdf2
 to int:
-        1398775081
+        1373552114
 to index (out of 15):
-        1
+        14
 
 
 "data"
@@ -277,11 +277,11 @@ blocks:
         0af4e5ba
         a9800bbd
 final hash:
-        a1edebab
+        a9800bbd
 to int:
-        2716724139
+        2843741117
 to index (out of 15):
-        9
+        2
 
 
 "coding"
@@ -293,33 +293,33 @@ blocks:
         b3e25831
         69b39a02
 final hash:
-        cfe3a3f1
+        cb5b2380
 to int:
-        3487802353
+        3411747712
 to index (out of 15):
-        13
+        7
 
 
 test 3 output:
 
 
 0|| 
-1|| hash(6,)
-2|| 
-3|| difficult(3,)
-4|| computer(0,)
-5|| 
-6|| 
-7|| 
-8|| science(1,4,)
-9|| data(7,8,)
+1|| 
+2|| data(7,8,)
+3|| computer(0,)
+4|| 
+5|| difficult(3,)
+6|| fun(2,)
+7|| coding(9,)-->science(1,4,)
+8|| 
+9|| 
 10|| 
 11|| 
-12|| git(5,)
-13|| coding(9,)-->fun(2,)
-14|| 
+12|| 
+13|| 
+14|| hash(6,)-->git(5,)
 
 
 literal string:
-"0|| \n1|| hash(6,)\n2|| \n3|| difficult(3,)\n4|| computer(0,)\n5|| \n6|| \n7|| \n8|| science(1,4,)\n9|| data(7,8,)\n10|| \n11|| \n12|| git(5,)\n13|| coding(9,)-->fun(2,)\n14|| \n"
+"0|| \n1|| \n2|| data(7,8,)\n3|| computer(0,)\n4|| \n5|| difficult(3,)\n6|| fun(2,)\n7|| coding(9,)-->science(1,4,)\n8|| \n9|| \n10|| \n11|| \n12|| \n13|| \n14|| hash(6,)-->git(5,)\n"
 

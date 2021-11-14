@@ -157,7 +157,7 @@ TEST_F(test_x, TestInsert)
 
 	result = test_insert(commits_1, len, tableSize);
 
-	expected = "0|| \n1|| \n2|| \n3|| difficult(3,)-->fun(2,)-->science(1,4,)\n4|| computer(0,)\n";
+	expected = "0|| difficult(3,)\n1|| fun(2,)\n2|| science(1,4,)\n3|| computer(0,)\n4|| \n";
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
@@ -169,7 +169,7 @@ TEST_F(test_x, TestInsert)
 
 	result = test_insert(commits_2, len, tableSize);
 
-	expected = "0|| \n1|| hash(1,)\n2|| \n3|| coding(4,)\n4|| \n5|| \n6|| \n7|| git(0,)\n8|| \n9|| data(2,3,)\n";
+	expected = "0|| \n1|| \n2|| coding(4,)\n3|| \n4|| hash(1,)-->git(0,)\n5|| \n6|| \n7|| data(2,3,)\n8|| \n9|| \n";
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
@@ -181,7 +181,7 @@ TEST_F(test_x, TestInsert)
 
 	result = test_insert(commits_3, len, tableSize);
 
-	expected = "0|| \n1|| hash(6,)\n2|| \n3|| difficult(3,)\n4|| computer(0,)\n5|| \n6|| \n7|| \n8|| science(1,4,)\n9|| data(7,8,)\n10|| \n11|| \n12|| git(5,)\n13|| coding(9,)-->fun(2,)\n14|| \n";
+	expected = "0|| \n1|| \n2|| data(7,8,)\n3|| computer(0,)\n4|| \n5|| difficult(3,)\n6|| fun(2,)\n7|| coding(9,)-->science(1,4,)\n8|| \n9|| \n10|| \n11|| \n12|| \n13|| \n14|| hash(6,)-->git(5,)\n";
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);

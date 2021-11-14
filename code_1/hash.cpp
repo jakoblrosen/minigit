@@ -118,12 +118,8 @@ HashNode *HashTable::searchItem(string key)
     sub_hash[3] = hash.substr(24, 8);
     sub_hash[4] = hash.substr(32, 8);
 
-    int start = key.length() % 5;
-    string final_hash = "";
-    for (int i = 0; i < 8; i++)
-    {
-        final_hash.push_back(sub_hash[(start + i) % 5].at(i));
-    }
+    // choose which block to use by modding key length by five
+    string final_hash = sub_hash[key.length() % 5];
 
     // convert hexadecimal hash into decimal int
     unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
@@ -151,12 +147,8 @@ bool HashTable::insertItem(string key, int cNum)
     sub_hash[3] = hash.substr(24, 8);
     sub_hash[4] = hash.substr(32, 8);
 
-    int start = key.length() % 5;
-    string final_hash = "";
-    for (int i = 0; i < 8; i++)
-    {
-        final_hash.push_back(sub_hash[(start + i) % 5][i]);
-    }
+    // choose which block to use by modding key length by five
+    string final_hash = sub_hash[key.length() % 5];
 
     // convert hexadecimal hash into decimal int
     unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
