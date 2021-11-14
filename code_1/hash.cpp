@@ -16,6 +16,7 @@ HashTable::HashTable(int bsize)
 {
     // intialize variable for underlying data structure
     table = new HashNode *[bsize];
+    memset(table, 0, sizeof(HashNode *) * bsize);
     tableSize = bsize;
 
     // initialize variables for hash function
@@ -37,6 +38,8 @@ HashTable::~HashTable()
             }
         }
     }
+
+    delete [] table;
 }
 
 // function to calculate hash function
@@ -174,7 +177,7 @@ bool HashTable::insertItem(string key, int cNum)
     }
 }
 
-// function to display hash table 
+// function to display hash table
 void HashTable::printTable()
 {
     HashNode *currNode = nullptr;
