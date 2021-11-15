@@ -78,6 +78,7 @@ TEST_F(test_x, TestHash)
 	string result;
 	string expected;
 
+	// case 1
 	key = "abc";
 
 	result = test_hash(key);
@@ -87,6 +88,7 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
+	// case 2
 	key = "abcdef";
 
 	result = test_hash(key);
@@ -96,6 +98,7 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
+	// case 3
 	key = "abcdefghijklmnopqrstuvwxyzZYXWVUTSRQPONMLKJIHGFEDCBA";
 
 	result = test_hash(key);
@@ -105,6 +108,7 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
+	// case 4
 	key = "The quick brown fox jumps over the lazy dog";
 
 	result = test_hash(key);
@@ -114,6 +118,7 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
+	// case 5
 	key = "The quick brown fox jumps over the lazy cog";
 
 	result = test_hash(key);
@@ -123,6 +128,7 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
+	// case 6
 	key = "";
 
 	result = test_hash(key);
@@ -140,6 +146,7 @@ TEST_F(test_x, TestInsert)
 	int length;
 	int table_size;
 
+	// case 1
 	string commits_1[] = {"computer", "science", "fun", "difficult", "science"};
 	length = 5;
 	table_size = 5;
@@ -151,6 +158,7 @@ TEST_F(test_x, TestInsert)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
 
+	// case 2
 	string commits_2[] = {"git", "hash", "data", "data", "coding"};
 	length = 5;
 	table_size = 10;
@@ -162,6 +170,7 @@ TEST_F(test_x, TestInsert)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
 
+	// case 3
 	string commits_3[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
 	length = 10;
 	table_size = 15;
@@ -172,49 +181,70 @@ TEST_F(test_x, TestInsert)
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
+
+	// case 4
+	string commits_4[] = {};
+	length = 0;
+	table_size = 5;
+
+	result = test_insert(commits_4, length, table_size);
+
+	expected = "0|| \n1|| \n2|| \n3|| \n4|| \n";
+
+	ASSERT_EQ(expected, result);
+	add_points_to_grade(2);
 }
 
 TEST_F(test_x, TestSearch)
 {
 	HashNode result;
-	string expected_key;
-	vector<int> expected_commits;
-	int length;
-	int table_size;
+	HashNode expected;
 	string search_key;
 
-	string commits_1[] = {"computer", "science", "fun", "difficult", "science"};
-	length = 5;
-	table_size = 5;
+	string commits[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
+	int length = 10;
+	int table_size = 15;
+
+	// case 1
 	search_key = "science";
 
-	result = test_search(commits_1, length, table_size, search_key);
+	result = test_search(commits, length, table_size, search_key);
 
-	expected_key = search_key;
+	expected.key = search_key;
+	expected.commit_nums = {1, 4};
 
-	ASSERT_EQ(expected_key, result.key);
+	ASSERT_EQ(expected.key, result.key);
+	ASSERT_EQ(expected.commit_nums, result.commit_nums);
 	add_points_to_grade(2);
 
-	string commits_2[] = {"git", "hash", "data", "data", "coding"};
-	length = 5;
-	table_size = 10;
+	// case 2
+	search_key = "data";
 
-	result = test_search(commits_2, length, table_size, search_key);
+	result = test_search(commits, length, table_size, search_key);
 
-	expected_key = search_key;
+	expected.key = search_key;
+	expected.commit_nums = {7, 8};
 
-	ASSERT_EQ(expected_key, result.key);
+	ASSERT_EQ(expected.key, result.key);
+	ASSERT_EQ(expected.commit_nums, result.commit_nums);
 	add_points_to_grade(2);
 
-	string commits_3[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
-	length = 10;
-	table_size = 15;
+	// case 3
+	search_key = "fun";
 
-	result = test_search(commits_3, length, table_size, search_key);
+	result = test_search(commits, length, table_size, search_key);
 
-	expected_key = search_key;
+	expected.key = search_key;
+	expected.commit_nums = {2};
 
-	ASSERT_EQ(expected_key, result.key);
+	ASSERT_EQ(expected.key, result.key);
+	ASSERT_EQ(expected.commit_nums, result.commit_nums);
+	add_points_to_grade(2);
+
+	// case 4
+	search_key = "error";
+
+	ASSERT_THROW(test_search(commits, length, table_size, search_key), exception);
 	add_points_to_grade(2);
 }
 
