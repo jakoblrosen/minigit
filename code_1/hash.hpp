@@ -15,7 +15,7 @@ struct HashNode // hash node datastructure
 {
     string key;
     vector<int> commit_nums;
-    struct HashNode *next;
+    HashNode *next;
 };
 
 class HashTable
