@@ -3,14 +3,14 @@
 
 #include "../code_1/hash.hpp"
 
-std::string exec(const char *cmd)
+string exec(const char *cmd)
 {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    array<char, 128> buffer;
+    string result;
+    unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
     if (!pipe)
     {
-        throw std::runtime_error("popen() failed!");
+        throw runtime_error("popen() failed!");
     }
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
     {
@@ -19,16 +19,16 @@ std::string exec(const char *cmd)
     return result;
 }
 
-std::string readFileIntoString(std::string fileName)
+string readFileIntoString(string file_name)
 {
-    std::string line, out;
-    ifstream A;
-    A.open(fileName);
-    if (!A)
+    string line, out;
+    ifstream ifs;
+    ifs.open(file_name);
+    if (!ifs)
     {
-        throw std::runtime_error("could not open file: " + fileName);
+        throw runtime_error("could not open file: " + file_name);
     }
-    while (getline(A, line))
+    while (getline(ifs, line))
     {
         out = out + line + "\n";
     }
@@ -42,12 +42,12 @@ string test_hash(string key)
     return table->hashFunction(key);
 }
 
-string test_insert(string arr[], int len, int tableSize)
+string test_insert(string arr[], int length, int table_size)
 {
     testing::internal::CaptureStdout();
-    HashTable *table = new HashTable(tableSize);
+    HashTable *table = new HashTable(table_size);
 
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < length; i++)
     {
         table->insertItem(arr[i], i);
     }
@@ -55,4 +55,17 @@ string test_insert(string arr[], int len, int tableSize)
     table->printTable();
     string output = testing::internal::GetCapturedStdout();
     return output;
+}
+
+HashNode test_search(string arr[], int length, int table_size, string search_key)
+{
+    HashTable *table = new HashTable(table_size);
+
+    for (int i = 0; i < length; i++)
+    {
+        table->insertItem(arr[i], i);
+    }
+
+    HashNode *node = table->searchItem(search_key);
+    return *node;
 }

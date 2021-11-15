@@ -20,21 +20,21 @@ MiniGit::~MiniGit()
     // Any postprocessing that may be required
 }
 
-void MiniGit::init(int hashtablesize)
+void MiniGit::init(int table_size)
 {
 }
 
-void MiniGit::add(string fileName)
+void MiniGit::add(string file_name)
 {
 }
 
-void MiniGit::rm(string fileName)
+void MiniGit::rm(string file_name)
 {
 }
 
 void MiniGit::printSearchTable()
 {
-    ht->printTable();
+    hash_table->printTable();
 }
 
 void MiniGit::search(string key)
@@ -43,9 +43,9 @@ void MiniGit::search(string key)
 
 string MiniGit::commit(string msg)
 {
-    return " "; // should return the commitID of the commited DLL node
+    return " "; // should return the commit_id of the commited DLL node
 }
 
-void MiniGit::checkout(string commitID)
+void MiniGit::checkout(string commit_id)
 {
 }

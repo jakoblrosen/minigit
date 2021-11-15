@@ -17,7 +17,7 @@ HashTable::HashTable(int bsize)
     // intialize variable for underlying data structure
     table = new HashNode *[bsize];
     memset(table, 0, sizeof(HashNode *) * bsize);
-    tableSize = bsize;
+    table_size = bsize;
 
     // initialize variables for hash function
     reset(digest, buffer, transforms);
@@ -25,15 +25,15 @@ HashTable::HashTable(int bsize)
 
 HashTable::~HashTable()
 {
-    for (int i = 0; i < tableSize; i++)
+    for (int i = 0; i < table_size; i++)
     {
         if (table[i] != nullptr)
         {
-            HashNode *currNode = table[i];
-            while (currNode != nullptr)
+            HashNode *curr_node = table[i];
+            while (curr_node != nullptr)
             {
-                HashNode *toDelete = currNode;
-                currNode = currNode->next;
+                HashNode *toDelete = curr_node;
+                curr_node = curr_node->next;
                 delete toDelete;
             }
         }
@@ -122,19 +122,19 @@ HashNode *HashTable::searchItem(string key)
     string final_hash = sub_hash[key.length() % 5];
 
     // convert hexadecimal hash into decimal int
-    unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
+    unsigned int index = stoul(final_hash, nullptr, 16) % table_size;
 
-    HashNode *currNode = table[index];
-    while (currNode != nullptr && currNode->key != key)
+    HashNode *curr_node = table[index];
+    while (curr_node != nullptr && curr_node->key != key)
     {
-        currNode = currNode->next;
+        curr_node = curr_node->next;
     }
 
-    return currNode;
+    return curr_node;
 }
 
 // function to insert
-bool HashTable::insertItem(string key, int cNum)
+bool HashTable::insertItem(string key, int commit_num)
 {
     // get base hash from key
     string hash = hashFunction(key);
@@ -151,19 +151,19 @@ bool HashTable::insertItem(string key, int cNum)
     string final_hash = sub_hash[key.length() % 5];
 
     // convert hexadecimal hash into decimal int
-    unsigned int index = stoul(final_hash, nullptr, 16) % tableSize;
+    unsigned int index = stoul(final_hash, nullptr, 16) % table_size;
 
     // check if key already exists in table or not
     if (searchItem(key) == nullptr)
     {
         table[index] = createNode(key, table[index]);
-        table[index]->commitNums.push_back(cNum);
+        table[index]->commit_nums.push_back(commit_num);
 
         return true;
     }
     else
     {
-        searchItem(key)->commitNums.push_back(cNum);
+        searchItem(key)->commit_nums.push_back(commit_num);
 
         return false;
     }
@@ -172,29 +172,29 @@ bool HashTable::insertItem(string key, int cNum)
 // function to display hash table
 void HashTable::printTable()
 {
-    HashNode *currNode = nullptr;
-    for (int i = 0; i < tableSize; i++)
+    HashNode *curr_node = nullptr;
+    for (int i = 0; i < table_size; i++)
     {
         cout << i << "|| ";
 
-        currNode = table[i];
-        while (currNode != nullptr)
+        curr_node = table[i];
+        while (curr_node != nullptr)
         {
-            cout << currNode->key << "(";
+            cout << curr_node->key << "(";
 
-            for (unsigned int j = 0; j < currNode->commitNums.size(); j++)
+            for (unsigned int j = 0; j < curr_node->commit_nums.size(); j++)
             {
-                cout << currNode->commitNums[j] << ",";
+                cout << curr_node->commit_nums[j] << ",";
             }
 
             cout << ")";
 
-            if (currNode->next != nullptr)
+            if (curr_node->next != nullptr)
             {
                 cout << "-->";
             }
 
-            currNode = currNode->next;
+            curr_node = curr_node->next;
         }
 
         cout << endl;

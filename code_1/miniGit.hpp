@@ -25,30 +25,29 @@ struct FileNode
 
 struct BranchNode
 {
-    int commitID;
-    string commitMessage;
+    int commit_id;
+    string commit_message;
     BranchNode *next;
     BranchNode *previous;
-    FileNode *fileHead;
+    FileNode *file_head;
 };
 
-//*** You can add helper functions if you desire ***//
 class MiniGit
 {
 private:
-    BranchNode *commitHead;
+    BranchNode *commit_head;
     int commits;
-    HashTable *ht;
+    HashTable *hash_table;
 
 public:
     MiniGit();
     ~MiniGit();
 
-    void init(int hashtablesize);
-    void add(string fileName);
-    void rm(string fileName);
+    void init(int table_size);
+    void add(string file_name);
+    void rm(string file_name);
     void search(string key);
     string commit(string msg);
-    void checkout(string commitID);
+    void checkout(string commit_id);
     void printSearchTable();
 };

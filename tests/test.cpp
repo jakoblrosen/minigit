@@ -1,8 +1,4 @@
-// If you change anything in this file, your changes will be ignored
-// in your homework submission.
-// Chekout TEST_F functions bellow to learn what is being tested.
 #include <gtest/gtest.h>
-// #include "../code_1/<HEADER FILE>.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -82,7 +78,6 @@ TEST_F(test_x, TestHash)
 	string result;
 	string expected;
 
-
 	key = "abc";
 
 	result = test_hash(key);
@@ -91,7 +86,6 @@ TEST_F(test_x, TestHash)
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
-
 
 	key = "abcdef";
 
@@ -102,7 +96,6 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
-
 	key = "abcdefghijklmnopqrstuvwxyzZYXWVUTSRQPONMLKJIHGFEDCBA";
 
 	result = test_hash(key);
@@ -111,7 +104,6 @@ TEST_F(test_x, TestHash)
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
-
 
 	key = "The quick brown fox jumps over the lazy dog";
 
@@ -122,7 +114,6 @@ TEST_F(test_x, TestHash)
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
 
-	
 	key = "The quick brown fox jumps over the lazy cog";
 
 	result = test_hash(key);
@@ -131,7 +122,6 @@ TEST_F(test_x, TestHash)
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(1);
-
 
 	key = "";
 
@@ -147,43 +137,84 @@ TEST_F(test_x, TestInsert)
 {
 	string result;
 	string expected;
-	int len;
-	int tableSize;
-
+	int length;
+	int table_size;
 
 	string commits_1[] = {"computer", "science", "fun", "difficult", "science"};
-	len = 5;
-	tableSize = 5;
+	length = 5;
+	table_size = 5;
 
-	result = test_insert(commits_1, len, tableSize);
+	result = test_insert(commits_1, length, table_size);
 
 	expected = "0|| difficult(3,)\n1|| fun(2,)\n2|| science(1,4,)\n3|| computer(0,)\n4|| \n";
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
 
-
 	string commits_2[] = {"git", "hash", "data", "data", "coding"};
-	len = 5;
-	tableSize = 10;
+	length = 5;
+	table_size = 10;
 
-	result = test_insert(commits_2, len, tableSize);
+	result = test_insert(commits_2, length, table_size);
 
 	expected = "0|| \n1|| \n2|| coding(4,)\n3|| \n4|| hash(1,)-->git(0,)\n5|| \n6|| \n7|| data(2,3,)\n8|| \n9|| \n";
 
 	ASSERT_EQ(expected, result);
 	add_points_to_grade(2);
 
-
 	string commits_3[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
-	len = 10;
-	tableSize = 15;
+	length = 10;
+	table_size = 15;
 
-	result = test_insert(commits_3, len, tableSize);
+	result = test_insert(commits_3, length, table_size);
 
 	expected = "0|| \n1|| \n2|| data(7,8,)\n3|| computer(0,)\n4|| \n5|| difficult(3,)\n6|| fun(2,)\n7|| coding(9,)-->science(1,4,)\n8|| \n9|| \n10|| \n11|| \n12|| \n13|| \n14|| hash(6,)-->git(5,)\n";
 
 	ASSERT_EQ(expected, result);
+	add_points_to_grade(2);
+}
+
+TEST_F(test_x, TestSearch)
+{
+	HashNode result;
+	string expected_key;
+	vector<int> expected_commits;
+	int length;
+	int table_size;
+	string search_key;
+
+	string commits_1[] = {"computer", "science", "fun", "difficult", "science"};
+	length = 5;
+	table_size = 5;
+	search_key = "science";
+
+	result = test_search(commits_1, length, table_size, search_key);
+
+	expected_key = search_key;
+
+	ASSERT_EQ(expected_key, result.key);
+	add_points_to_grade(2);
+
+	string commits_2[] = {"git", "hash", "data", "data", "coding"};
+	length = 5;
+	table_size = 10;
+
+	result = test_search(commits_2, length, table_size, search_key);
+
+	expected_key = search_key;
+
+	ASSERT_EQ(expected_key, result.key);
+	add_points_to_grade(2);
+
+	string commits_3[] = {"computer", "science", "fun", "difficult", "science", "git", "hash", "data", "data", "coding"};
+	length = 10;
+	table_size = 15;
+
+	result = test_search(commits_3, length, table_size, search_key);
+
+	expected_key = search_key;
+
+	ASSERT_EQ(expected_key, result.key);
 	add_points_to_grade(2);
 }
 

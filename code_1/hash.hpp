@@ -14,14 +14,14 @@ using namespace std;
 struct HashNode // hash node datastructure
 {
     string key;
-    vector<int> commitNums;
+    vector<int> commit_nums;
     struct HashNode *next;
 };
 
 class HashTable
 {
 private:
-    int tableSize; // No. of buckets (linked lists)
+    int table_size; // No. of buckets (linked lists)
 
     // Pointer to an array containing buckets
     HashNode **table;
@@ -219,7 +219,7 @@ public:
     string hashFunction(string key);
 
     // inserts a key into hash table
-    bool insertItem(string key, int num);
+    bool insertItem(string key, int commit_num);
 
     void printTable();
 
