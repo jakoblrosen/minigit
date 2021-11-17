@@ -1,6 +1,5 @@
 # exclude everything
 .minigit/*
-.github/*
 .vscode/*
 build/*
 ipch
