@@ -67,13 +67,5 @@ HashNode test_search(string arr[], int length, int table_size, string search_key
     }
 
     HashNode *node = table->searchItem(search_key);
-    if (node != nullptr)
-    {
-        return *node;
-    }
-    else
-    {
-        exception e;
-        throw e;
-    }
+    return *node;
 }

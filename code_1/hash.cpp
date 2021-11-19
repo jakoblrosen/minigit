@@ -39,7 +39,7 @@ HashTable::~HashTable()
         }
     }
 
-    delete [] table;
+    delete[] table;
 }
 
 // function to calculate hash function
@@ -130,7 +130,15 @@ HashNode *HashTable::searchItem(string key)
         curr_node = curr_node->next;
     }
 
-    return curr_node;
+    if (curr_node != nullptr)
+    {
+        return curr_node;
+    }
+    else
+    {
+        exception e;
+        throw e;
+    }
 }
 
 // function to insert
@@ -154,18 +162,19 @@ bool HashTable::insertItem(string key, int commit_num)
     unsigned int index = stoul(final_hash, nullptr, 16) % table_size;
 
     // check if key already exists in table or not
-    if (searchItem(key) == nullptr)
+
+    try
+    {
+        searchItem(key)->commit_nums.push_back(commit_num);
+
+        return false;
+    }
+    catch (exception e)
     {
         table[index] = createNode(key, table[index]);
         table[index]->commit_nums.push_back(commit_num);
 
         return true;
-    }
-    else
-    {
-        searchItem(key)->commit_nums.push_back(commit_num);
-
-        return false;
     }
 }
 
