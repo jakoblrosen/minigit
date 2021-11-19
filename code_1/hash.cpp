@@ -162,14 +162,13 @@ bool HashTable::insertItem(string key, int commit_num)
     unsigned int index = stoul(final_hash, nullptr, 16) % table_size;
 
     // check if key already exists in table or not
-
     try
     {
         searchItem(key)->commit_nums.push_back(commit_num);
 
         return false;
     }
-    catch (exception e)
+    catch (const exception &e)
     {
         table[index] = createNode(key, table[index]);
         table[index]->commit_nums.push_back(commit_num);
