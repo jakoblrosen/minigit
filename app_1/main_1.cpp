@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
             break;
         }
 
-        cout << endl << endl;
+        cout << endl;
     }
 
     return 0;
