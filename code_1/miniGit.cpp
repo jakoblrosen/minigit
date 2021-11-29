@@ -25,6 +25,7 @@ void MiniGit::add(string file_name)
     if (filesystem::exists(file_name))
     {
         bool found = false;
+        bool update = false;
         FileNode *curr_node = commit_head->file_head;
 
         while (!found && curr_node != nullptr)
@@ -32,6 +33,25 @@ void MiniGit::add(string file_name)
             if (curr_node->name == file_name)
             {
                 found = true;
+
+                // check if the file existed in the previous SLL and is the same version, in which case it can be updated
+                if (commit_head->previous != nullptr)
+                {
+                    FileNode *crawler = commit_head->previous->file_head;
+
+                    while (!update && crawler != nullptr)
+                    {
+                        if (crawler->name == file_name && crawler->version == curr_node->version)
+                        {
+                            // FileNode in working commit has same version as FileNode from previous commit, so it can be updated
+                            update = true;
+                        }
+                        else
+                        {
+                            crawler = crawler->next;
+                        }
+                    }
+                }
             }
             else
             {
@@ -41,10 +61,12 @@ void MiniGit::add(string file_name)
 
         if (!found)
         {
+            // case of adding a new file
             FileNode *node = new FileNode;
             node->name = file_name;
             node->next = commit_head->file_head;
 
+            // get next available version number
             int version = 0;
             bool next_version_found = false;
 
@@ -62,14 +84,35 @@ void MiniGit::add(string file_name)
 
             commit_head->file_head = node;
         }
+        else if (update)
+        {
+            // case of updating file already in commit
+            // get next available version number
+            int version = 0;
+            bool next_version_found = false;
+
+            while (!next_version_found)
+            {
+                next_version_found = !check_file(file_name, version, ".minigit/");
+
+                if (!next_version_found)
+                {
+                    version++;
+                }
+            }
+
+            curr_node->version = version;
+        }
         else
         {
+            // file has already been updated
             exception e;
             throw e;
         }
     }
     else
     {
+        // file does not exist
         exception e;
         throw e;
     }
@@ -139,6 +182,27 @@ void MiniGit::search(string key)
 
 string MiniGit::commit(string msg)
 {
+    // check that commit message is not empty and unique
+    if (msg == "")
+    {
+        exception e;
+        throw e;
+    }
+    else
+    {
+        BranchNode *message_crawler = commit_head->previous;
+        while (message_crawler != nullptr && message_crawler->commit_message != msg)
+        {
+            message_crawler = message_crawler->previous;
+        }
+
+        if (message_crawler != nullptr)
+        {
+            exception e;
+            throw e;
+        }
+    }
+
     // visit all file nodes for current commit to copy to .minigit/
     FileNode *crawler = commit_head->file_head;
     while (crawler != nullptr)
@@ -147,7 +211,11 @@ string MiniGit::commit(string msg)
         string file_name = minigit_file_name(crawler->name, crawler->version);
         filesystem::path out_path = minigit_file_path(file_name, ".minigit/");
 
-        filesystem::copy_file(in_path, out_path);
+        // only store new or updated files
+        if (!filesystem::exists(out_path))
+        {
+            filesystem::copy_file(in_path, out_path);
+        }
 
         crawler = crawler->next;
     }
@@ -165,8 +233,20 @@ string MiniGit::commit(string msg)
     commit_head->commit_id = commits;
     commit_head->commit_message = msg;
 
+    // prepare a new working commit
     BranchNode *node = new BranchNode;
-    node->commit_id = commits + 1;
+    node->commit_id = -1; // set commit_id to -1 to disallow the user from checking out the working commit
+    // copy over the SLL from the previous commit
+    crawler = commit_head->file_head;
+    while (crawler != nullptr)
+    {
+        FileNode *new_file = new FileNode;
+        *new_file = *crawler;
+        new_file->next = node->file_head;
+        node->file_head = new_file;
+
+        crawler = crawler->next;
+    }
     commit_head->next = node;
     node->previous = commit_head;
     commit_head = node;
@@ -182,6 +262,13 @@ void MiniGit::checkout(string commit_id)
 {
     BranchNode *crawler = commit_head;
     bool found = crawler->commit_id == stoi(commit_id);
+
+    // check that commit_id >= 0
+    if (stoi(commit_id) < 0)
+    {
+        exception e;
+        throw e;
+    }
 
     while (!found && crawler->previous != nullptr)
     {

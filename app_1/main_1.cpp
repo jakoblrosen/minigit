@@ -83,7 +83,15 @@ int main(int argc, char *argv[])
 
             getline(cin, input_string);
 
-            minigit.commit(input_string);
+            try
+            {
+                minigit.commit(input_string);
+            }
+            catch(const exception& e)
+            {
+                cout << "Invalid commit message" << endl;
+            }
+            
 
             break;
 
