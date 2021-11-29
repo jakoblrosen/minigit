@@ -215,8 +215,8 @@ string MiniGit::minigit_file_name(string file_name, int version_num)
     // create string for file in .minigit
     // example.txt -> example00.txt
     string out_file = "";
-    int dot_index = file_name.find('.');
-    int slash_index = file_name.find('/');
+    int dot_index = file_name.find_last_of('.');
+    int slash_index = file_name.find_last_of('/');
     string version = (version_num < 10) ? "0" + to_string(version_num) : to_string(version_num);
     out_file.append(file_name.substr(slash_index + 1, dot_index - (slash_index + 1)));
     out_file.append(version);
