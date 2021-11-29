@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <iostream>
 #include <vector>
 #include "hash.hpp"
@@ -38,6 +39,10 @@ private:
     BranchNode *commit_head;
     int commits;
     HashTable *hash_table;
+
+    string minigit_file_name(string file_name, int version);
+    filesystem::path minigit_file_path(string file_name, string directory);
+    bool check_file(string file_name, int version, string directory);
 
 public:
     MiniGit();
