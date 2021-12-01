@@ -176,7 +176,7 @@ string MiniGit::commit(string msg)
             word_count++;
         }
 
-        if (word_count < 1 || word_count > 3)
+        if (word_count > 3)
         {
             throw runtime_error("The commit message provided is invalid");
         }
