@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
         getline(cin, input_string);
         cout << endl;
 
-        input_string == "" || input_string.find_first_not_of("0123456789") ? input_int = stoi(input_string) : input_int = -1;
+        !input_string.empty() && input_string.find_first_not_of("0123456789") ? input_int = stoi(input_string) : input_int = -1;
 
         if (!initialized && input_int != 1)
         {
