@@ -192,4 +192,142 @@ TEST_F(test_x, TestSearch)
 	ASSERT_THROW(test_search(commits, length, table_size, search_key), exception);
 }
 
-// TODO add more tests for insert. Design tests for search from hashTable.
+TEST_F(test_x, TestAdd)
+{
+	string result;
+	string expected;
+	int length;
+	int table_size;
+	string commit_message;
+
+	// case 1
+	string file_paths_1[] = {"../tests/folder/text.txt"};
+	length = 1;
+	table_size = 5;
+	commit_message = "insert text file";
+
+	result = test_add(file_paths_1, length, table_size, commit_message);
+
+	expected = "0|| text(0,)-->insert(0,)\n1|| file(0,)\n2|| \n3|| \n4|| \n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 2
+	string file_paths_2[] = {"../tests/folder/cplusplus.cpp"};
+	length = 1;
+	table_size = 5;
+	commit_message = "insert cpp file";
+
+	result = test_add(file_paths_2, length, table_size, commit_message);
+
+	expected = "0|| insert(0,)\n1|| file(0,)\n2|| \n3|| \n4|| cpp(0,)\n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 3
+	string file_paths_3[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	length = 2;
+	table_size = 5;
+	commit_message = "insert both";
+
+	result = test_add(file_paths_3, length, table_size, commit_message);
+
+	expected = "0|| insert(0,)\n1|| both(0,)\n2|| \n3|| \n4|| \n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 4
+	string file_paths_4[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp", "../folder/text.txt"};
+	length = 3;
+	table_size = 5;
+	commit_message = "testing exception updated";
+
+	ASSERT_THROW(test_add(file_paths_4, length, table_size, commit_message), exception);
+
+	// case 5
+	string file_paths_5[] = {"../tests/folder/fake_file.txt"};
+	length = 1;
+	table_size = 5;
+	commit_message = "testing exception non-existent";
+
+	ASSERT_THROW(test_add(file_paths_5, length, table_size, commit_message), exception);
+}
+
+TEST_F(test_x, TestRm)
+{
+	string result;
+	string expected;
+	int add_length;
+	int rm_length;
+	int table_size;
+	string commit_message;
+
+	// case 1
+	string add_1[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	add_length = 2;
+	string rm_1[] = {"../tests/folder/text.txt"};
+	rm_length = 1;
+	table_size = 5;
+	commit_message = "remove text file";
+
+	result = test_rm(add_1, add_length, rm_1, rm_length, table_size, commit_message);
+
+	expected = "0|| text(0,)-->remove(0,)\n1|| file(0,)\n2|| \n3|| \n4|| \n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 2
+	string add_2[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	add_length = 2;
+	string rm_2[] = {"../tests/folder/cplusplus.cpp"};
+	rm_length = 1;
+	table_size = 5;
+	commit_message = "remove cpp file";
+
+	result = test_rm(add_2, add_length, rm_2, rm_length, table_size, commit_message);
+
+	expected = "0|| remove(0,)\n1|| file(0,)\n2|| \n3|| \n4|| cpp(0,)\n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 3
+	string add_3[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	add_length = 2;
+	string rm_3[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	rm_length = 2;
+	table_size = 5;
+	commit_message = "remove both";
+
+	result = test_rm(add_3, add_length, rm_3, rm_length, table_size, commit_message);
+
+	expected = "0|| remove(0,)\n1|| both(0,)\n2|| \n3|| \n4|| \n";
+
+	ASSERT_EQ(expected, result);
+
+	// case 4
+	string add_4[] = {"../tests/folder/text.txt", "../tests/folder/cplusplus.cpp"};
+	add_length = 2;
+	string rm_4[] = {"../tests/folder/text.txt", "../tests/folder/text.txt"};
+	rm_length = 2;
+	table_size = 5;
+	commit_message = "testing exception pre-removed";
+
+	ASSERT_THROW(test_rm(add_4, add_length, rm_4, rm_length, table_size, commit_message), exception);
+
+	// case 5
+	string add_5[] = {};
+	add_length = 0;
+	string rm_5[] = {"../tests/folder/fake_file.txt"};
+	rm_length = 1;
+	table_size = 5;
+	commit_message = "testing exception non-existent";
+
+	ASSERT_THROW(test_rm(add_5, add_length, rm_5, rm_length, table_size, commit_message), exception);
+}
+
+TEST_F(test_x, TestCommit)
+{
+	// TODO write test and helper function for TestCommit
+}
+
+// TODO add tests for MiniGit, test all of the core functions, and expected exceptions
