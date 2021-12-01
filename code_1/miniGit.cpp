@@ -33,6 +33,8 @@ MiniGit::~MiniGit()
     }
 
     delete hash_table;
+
+    filesystem::remove_all(".minigit");
 }
 
 void MiniGit::init(int table_size)
@@ -249,6 +251,7 @@ string MiniGit::commit(string msg)
     // prepare a new working commit
     BranchNode *node = new BranchNode;
     node->commit_id = -1; // set commit_id to -1 to disallow the user from checking out the working commit
+    node->file_head = nullptr;
     // copy over the SLL from the previous commit
     file_crawler = commit_head->file_head;
     while (file_crawler != nullptr)
