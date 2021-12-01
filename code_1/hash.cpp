@@ -136,8 +136,7 @@ HashNode *HashTable::searchItem(string key)
     }
     else
     {
-        exception e;
-        throw e;
+        throw runtime_error("No commits with key \"" + key + "\" could be found");
     }
 }
 

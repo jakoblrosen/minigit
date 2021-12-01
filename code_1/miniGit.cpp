@@ -16,6 +16,11 @@ MiniGit::~MiniGit()
 void MiniGit::init(int table_size)
 {
     commit_head = new BranchNode;
+    commit_head->commit_id = -1;
+    commit_head->commit_message = "";
+    commit_head->file_head = nullptr;
+    commit_head->next = nullptr;
+    commit_head->previous = nullptr;
     commits = 0;
     hash_table = new HashTable(table_size);
 }
@@ -106,15 +111,13 @@ void MiniGit::add(string file_name)
         else
         {
             // file has already been updated
-            exception e;
-            throw e;
+            throw runtime_error("The file path provided has already been updated");
         }
     }
     else
     {
         // file does not exist
-        exception e;
-        throw e;
+        throw runtime_error("The file path provided does not exist");
     }
 }
 
@@ -152,8 +155,7 @@ void MiniGit::rm(string file_name)
     }
     else
     {
-        exception e;
-        throw e;
+        throw runtime_error("The file provided does not exist in the current working commit");
     }
 }
 
@@ -176,19 +178,35 @@ void MiniGit::search(string key)
     }
     catch (const exception &e)
     {
-        cout << "No commits were found with the keyword \"" << key << "\"" << endl;
+        cout << e.what() << endl;
     }
 }
 
 string MiniGit::commit(string msg)
 {
-    // check that commit message is not empty and unique
+    // check that commit message is not empty, unique, and at most three words
+    int word_count = 0;
+    string placeholder;
+    stringstream message_stream(msg);
+
     if (msg == "")
     {
-        exception e;
-        throw e;
+        throw runtime_error("The commit message cannot be empty");
     }
     else
+    {
+        while (!message_stream.eof())
+        {
+            getline(message_stream, placeholder, ' ');
+            word_count++;
+        }
+
+        if (word_count < 1 || word_count > 3)
+        {
+            throw runtime_error("The commit message provided is invalid");
+        }
+    }
+
     {
         BranchNode *message_crawler = commit_head->previous;
         while (message_crawler != nullptr && message_crawler->commit_message != msg)
@@ -198,8 +216,7 @@ string MiniGit::commit(string msg)
 
         if (message_crawler != nullptr)
         {
-            exception e;
-            throw e;
+            throw runtime_error("The commit message provided has already been used before");
         }
     }
 
@@ -263,11 +280,15 @@ void MiniGit::checkout(string commit_id)
     BranchNode *crawler = commit_head;
     bool found = crawler->commit_id == stoi(commit_id);
 
+    if (commit_id.find_first_not_of("0123456789") != string::npos)
+    {
+        throw runtime_error("The commit ID provided is not a valid commit ID");
+    }
+
     // check that commit_id >= 0
     if (stoi(commit_id) < 0)
     {
-        exception e;
-        throw e;
+        throw runtime_error("The commit ID provided was invalid");
     }
 
     while (!found && crawler->previous != nullptr)
@@ -292,8 +313,7 @@ void MiniGit::checkout(string commit_id)
     }
     else
     {
-        exception e;
-        throw e;
+        throw runtime_error("The commit ID provided could not be found");
     }
 }
 
