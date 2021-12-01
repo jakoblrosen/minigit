@@ -1,10 +1,10 @@
 #pragma once
 
+#include "hash.hpp"
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "hash.hpp"
 
 using namespace std;
 

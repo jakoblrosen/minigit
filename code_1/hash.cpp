@@ -1,6 +1,6 @@
 // CPP program to implement hashing with chaining
-#include <iostream>
 #include "hash.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -18,9 +18,6 @@ HashTable::HashTable(int bsize)
     table = new HashNode *[bsize];
     memset(table, 0, sizeof(HashNode *) * bsize);
     table_size = bsize;
-
-    // initialize variables for hash function
-    reset(digest, buffer, transforms);
 }
 
 HashTable::~HashTable()
@@ -44,64 +41,10 @@ HashTable::~HashTable()
 
 // function to calculate hash function
 // implementation of SHA-1 hash function from https://github.com/vog/sha1
-string HashTable::hashFunction(string s)
+string HashTable::hashFunction(string key)
 {
-    istringstream is(s);
-
-    while (true)
-    {
-        char sbuf[BLOCK_BYTES];
-        is.read(sbuf, BLOCK_BYTES - buffer.size());
-        buffer.append(sbuf, (size_t)is.gcount());
-        if (buffer.size() != BLOCK_BYTES)
-        {
-            break;
-        }
-        uint32_t block[BLOCK_INTS];
-        buffer_to_block(buffer, block);
-        transform(digest, block, transforms);
-        buffer.clear();
-    }
-
-    // total number of hashed bits
-    uint64_t total_bits = (transforms * BLOCK_BYTES + buffer.size()) * 8;
-
-    // padding
-    buffer += (char)0x80;
-    size_t orig_size = buffer.size();
-    while (buffer.size() < BLOCK_BYTES)
-    {
-        buffer += (char)0x00;
-    }
-
-    uint32_t block[BLOCK_INTS];
-    buffer_to_block(buffer, block);
-
-    if (orig_size > BLOCK_BYTES - 8)
-    {
-        transform(digest, block, transforms);
-        for (size_t i = 0; i < BLOCK_INTS - 2; i++)
-        {
-            block[i] = 0;
-        }
-    }
-
-    // append total_bits, split this uint64_t into two uint32_t
-    block[BLOCK_INTS - 1] = (uint32_t)total_bits;
-    block[BLOCK_INTS - 2] = (uint32_t)(total_bits >> 32);
-    transform(digest, block, transforms);
-
-    ostringstream result;
-    for (size_t i = 0; i < sizeof(digest) / sizeof(digest[0]); i++)
-    {
-        result << hex << setfill('0') << setw(8);
-        result << digest[i];
-    }
-
-    // reset for next run
-    reset(digest, buffer, transforms);
-
-    return result.str();
+    SHA1 sha1;
+    return sha1.final(key);
 }
 
 // function to search
