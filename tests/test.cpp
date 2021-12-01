@@ -324,10 +324,3 @@ TEST_F(test_x, TestRm)
 
 	ASSERT_THROW(test_rm(add_5, add_length, rm_5, rm_length, table_size, commit_message), exception);
 }
-
-TEST_F(test_x, TestCommit)
-{
-	// TODO write test and helper function for TestCommit
-}
-
-// TODO add tests for MiniGit, test all of the core functions, and expected exceptions
