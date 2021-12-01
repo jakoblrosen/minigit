@@ -86,10 +86,6 @@ int main(int argc, char *argv[])
                 }
                 catch (const exception &e)
                 {
-                    if (e.what() == "The file path provided has already been added")
-                    {
-                        valid = true;
-                    }
                     cout << e.what() << endl;
                 }
             }
