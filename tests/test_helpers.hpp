@@ -10,9 +10,12 @@
 using namespace std;
 
 // TODO add detailed explanation on what the function should do
-std::string exec(const char *cmd);
-std::string readFileIntoString(std::string file_name);
+string exec(const char *cmd);
+string readFileIntoString(string file_name);
 string test_hash(string key);
 string test_insert(string arr[], int length, int table_size);
 HashNode test_search(string arr[], int length, int table_size, string search_key);
+string test_add(string arr[], int length, int table_size, string commit_message);
+string test_rm(string add[], int add_length, string rm[], int rm_length, int table_size, string commit_message);
+
 #endif // TEST_H__
