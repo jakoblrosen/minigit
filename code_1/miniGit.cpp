@@ -33,8 +33,6 @@ MiniGit::~MiniGit()
     }
 
     delete hash_table;
-
-    filesystem::remove_all(".minigit");
 }
 
 void MiniGit::init(int table_size)
@@ -81,8 +79,7 @@ void MiniGit::add(string file_name)
             FileNode *node = new FileNode;
             node->name = file_name;
             node->next = commit_head->file_head;
-
-            node->version = get_next_version(node->name);
+            node->version = 0;
 
             commit_head->file_head = node;
         }
