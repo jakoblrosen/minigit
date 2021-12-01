@@ -276,13 +276,19 @@ string MiniGit::commit(string msg)
 
 void MiniGit::checkout(string commit_id)
 {
+    if (commit_id.empty())
+    {
+        throw runtime_error("Commit ID cannot be empty");
+    }
+
     BranchNode *commit_crawler = commit_head;
-    bool found = commit_crawler->commit_id == stoi(commit_id);
 
     if (commit_id.find_first_not_of("0123456789") != string::npos)
     {
         throw runtime_error("The commit ID provided is not a valid commit ID");
     }
+
+    bool found = commit_crawler->commit_id == stoi(commit_id);
 
     // check that commit_id >= 0
     if (stoi(commit_id) < 0)
