@@ -15,7 +15,7 @@ MiniGit::~MiniGit()
 
 void MiniGit::init(int table_size)
 {
-    if (commit_head == nulptr)
+    if (commit_head == nullptr)
     {
         commit_head = new BranchNode;
         commit_head->commit_id = -1;
