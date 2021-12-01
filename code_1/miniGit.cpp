@@ -117,7 +117,7 @@ void MiniGit::search(string key)
     {
         HashNode *node = hash_table->searchItem(key);
         cout << "Commits with the word \"" << key << "\": ";
-        for (int i = 0; i < node->commit_nums.size(); i++)
+        for (unsigned int i = 0; i < node->commit_nums.size(); i++)
         {
             cout << node->commit_nums[i] << ", ";
         }
