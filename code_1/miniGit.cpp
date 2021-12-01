@@ -6,11 +6,33 @@ MiniGit::MiniGit()
 {
     filesystem::remove_all(".minigit");
     filesystem::create_directory(".minigit");
+
+    commit_head = nullptr;
+    commits = 0;
+    hash_table = nullptr;
 }
 
 MiniGit::~MiniGit()
 {
-    // any postprocessing that may be required
+    BranchNode *commit_crawler = commit_head;
+    
+    while (commit_crawler != nullptr)
+    {
+        FileNode *file_crawler = commit_crawler->file_head;
+
+        while (file_crawler != nullptr)
+        {
+            FileNode *delete_file = file_crawler;
+            file_crawler = file_crawler->next;
+            delete delete_file;
+        }
+
+        BranchNode *delete_commit = commit_crawler;
+        commit_crawler = commit_crawler->previous;
+        delete delete_commit;
+    }
+
+    delete hash_table;
 }
 
 void MiniGit::init(int table_size)
