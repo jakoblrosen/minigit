@@ -30,7 +30,6 @@ void MiniGit::add(string file_name)
     if (filesystem::exists(file_name))
     {
         bool found = false;
-        bool update = false;
         FileNode *curr_node = commit_head->file_head;
 
         while (!found && curr_node != nullptr)
@@ -38,25 +37,6 @@ void MiniGit::add(string file_name)
             if (curr_node->name == file_name)
             {
                 found = true;
-
-                // check if the file existed in the previous SLL and is the same version, in which case it can be updated
-                if (commit_head->previous != nullptr)
-                {
-                    FileNode *crawler = commit_head->previous->file_head;
-
-                    while (!update && crawler != nullptr)
-                    {
-                        if (crawler->name == file_name && crawler->version == curr_node->version)
-                        {
-                            // FileNode in working commit has same version as FileNode from previous commit, so it can be updated
-                            update = true;
-                        }
-                        else
-                        {
-                            crawler = crawler->next;
-                        }
-                    }
-                }
             }
             else
             {
@@ -71,53 +51,20 @@ void MiniGit::add(string file_name)
             node->name = file_name;
             node->next = commit_head->file_head;
 
-            // get next available version number
-            int version = 0;
-            bool next_version_found = false;
-
-            while (!next_version_found)
-            {
-                next_version_found = !check_file(file_name, version, ".minigit/");
-
-                if (!next_version_found)
-                {
-                    version++;
-                }
-            }
-
-            node->version = version;
+            node->version = get_next_version(node->name);
 
             commit_head->file_head = node;
-        }
-        else if (update)
-        {
-            // case of updating file already in commit
-            // get next available version number
-            int version = 0;
-            bool next_version_found = false;
-
-            while (!next_version_found)
-            {
-                next_version_found = !check_file(file_name, version, ".minigit/");
-
-                if (!next_version_found)
-                {
-                    version++;
-                }
-            }
-
-            curr_node->version = version;
         }
         else
         {
             // file has already been updated
-            throw runtime_error("The file path provided has already been updated");
+            throw runtime_error("The file path provided has already been added");
         }
     }
     else
     {
         // file does not exist
-        throw runtime_error("The file path provided does not exist");
+        throw runtime_error("The file path provided could not be found");
     }
 }
 
@@ -220,12 +167,32 @@ string MiniGit::commit(string msg)
         }
     }
 
-    // visit all file nodes for current commit to copy to .minigit/
-    FileNode *crawler = commit_head->file_head;
-    while (crawler != nullptr)
+    FileNode *version_crawler = commit_head->file_head;
+    while (version_crawler != nullptr)
     {
-        filesystem::path in_path = crawler->name;
-        string file_name = minigit_file_name(crawler->name, crawler->version);
+        // check if file has changed
+        if (!compare_files(version_crawler->name, minigit_file_path(minigit_file_name(version_crawler->name, version_crawler->version), ".minigit/")))
+        {
+            // see if source file still exists
+            if (!filesystem::exists(version_crawler->name))
+            {
+                throw runtime_error("File \"" + version_crawler->name + "\" could not be found");
+            }
+            else
+            {
+                version_crawler->version = get_next_version(version_crawler->name);
+            }
+        }
+
+        version_crawler = version_crawler->next;
+    }
+
+    // visit all file nodes for current commit to copy to .minigit/
+    FileNode *file_crawler = commit_head->file_head;
+    while (file_crawler != nullptr)
+    {
+        filesystem::path in_path = file_crawler->name;
+        string file_name = minigit_file_name(file_crawler->name, file_crawler->version);
         filesystem::path out_path = minigit_file_path(file_name, ".minigit/");
 
         // only store new or updated files
@@ -234,7 +201,7 @@ string MiniGit::commit(string msg)
             filesystem::copy_file(in_path, out_path);
         }
 
-        crawler = crawler->next;
+        file_crawler = file_crawler->next;
     }
 
     // store words in message to hash table
@@ -254,15 +221,15 @@ string MiniGit::commit(string msg)
     BranchNode *node = new BranchNode;
     node->commit_id = -1; // set commit_id to -1 to disallow the user from checking out the working commit
     // copy over the SLL from the previous commit
-    crawler = commit_head->file_head;
-    while (crawler != nullptr)
+    file_crawler = commit_head->file_head;
+    while (file_crawler != nullptr)
     {
         FileNode *new_file = new FileNode;
-        *new_file = *crawler;
+        *new_file = *file_crawler;
         new_file->next = node->file_head;
         node->file_head = new_file;
 
-        crawler = crawler->next;
+        file_crawler = file_crawler->next;
     }
     commit_head->next = node;
     node->previous = commit_head;
@@ -277,8 +244,8 @@ string MiniGit::commit(string msg)
 
 void MiniGit::checkout(string commit_id)
 {
-    BranchNode *crawler = commit_head;
-    bool found = crawler->commit_id == stoi(commit_id);
+    BranchNode *commit_crawler = commit_head;
+    bool found = commit_crawler->commit_id == stoi(commit_id);
 
     if (commit_id.find_first_not_of("0123456789") != string::npos)
     {
@@ -291,15 +258,15 @@ void MiniGit::checkout(string commit_id)
         throw runtime_error("The commit ID provided was invalid");
     }
 
-    while (!found && crawler->previous != nullptr)
+    while (!found && commit_crawler->previous != nullptr)
     {
-        crawler = crawler->previous;
-        found = crawler->commit_id == stoi(commit_id);
+        commit_crawler = commit_crawler->previous;
+        found = commit_crawler->commit_id == stoi(commit_id);
     }
 
     if (found)
     {
-        FileNode *file_crawler = crawler->file_head;
+        FileNode *file_crawler = commit_crawler->file_head;
         while (file_crawler != nullptr)
         {
             filesystem::path out_path = file_crawler->name;
@@ -345,4 +312,51 @@ bool MiniGit::check_file(string file_name, int version, string directory)
 {
     string path = minigit_file_path(minigit_file_name(file_name, version), directory);
     return filesystem::exists(path);
+}
+
+int MiniGit::get_next_version(string file_name)
+{
+    // get next available version number
+    int version = 0;
+    bool next_version_found = false;
+
+    while (!next_version_found)
+    {
+        next_version_found = !check_file(file_name, version, ".minigit/");
+
+        if (next_version_found)
+        {
+            break;
+        }
+        else
+        {
+            version++;
+        }
+    }
+
+    return version;
+}
+
+// file comparison function from https://stackoverflow.com/questions/6163611/compare-two-files/37575457
+bool MiniGit::compare_files(string source_file, string minigit_file)
+{
+    ifstream source_ifs(source_file, ifstream::binary | ifstream::ate);
+    ifstream minigit_ifs(minigit_file, ifstream::binary | ifstream::ate);
+
+    if (source_ifs.fail() || minigit_ifs.fail())
+    {
+        return false; // problem with files
+    }
+
+    if (source_ifs.tellg() != minigit_ifs.tellg())
+    {
+        return false; // sizes are not equal
+    }
+
+    // compare contents from beginning with equal()
+    source_ifs.seekg(0, ifstream::beg);
+    minigit_ifs.seekg(0, ifstream::beg);
+    return equal(istreambuf_iterator<char>(source_ifs.rdbuf()),
+                 istreambuf_iterator<char>(),
+                 istreambuf_iterator<char>(minigit_ifs.rdbuf()));
 }

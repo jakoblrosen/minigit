@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "hash.hpp"
 
@@ -43,6 +44,8 @@ private:
     string minigit_file_name(string file_name, int version);
     filesystem::path minigit_file_path(string file_name, string directory);
     bool check_file(string file_name, int version, string directory);
+    int get_next_version(string file_name);
+    bool compare_files(string source_file, string minigit_file);
 
 public:
     MiniGit();
