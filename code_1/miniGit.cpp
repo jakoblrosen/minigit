@@ -15,14 +15,21 @@ MiniGit::~MiniGit()
 
 void MiniGit::init(int table_size)
 {
-    commit_head = new BranchNode;
-    commit_head->commit_id = -1;
-    commit_head->commit_message = "";
-    commit_head->file_head = nullptr;
-    commit_head->next = nullptr;
-    commit_head->previous = nullptr;
-    commits = 0;
-    hash_table = new HashTable(table_size);
+    if (commit_head == nulptr)
+    {
+        commit_head = new BranchNode;
+        commit_head->commit_id = -1;
+        commit_head->commit_message = "";
+        commit_head->file_head = nullptr;
+        commit_head->next = nullptr;
+        commit_head->previous = nullptr;
+        commits = 0;
+        hash_table = new HashTable(table_size);
+    }
+    else
+    {
+        throw runtime_error("Cannot re-initialize MiniGit");
+    }
 }
 
 void MiniGit::add(string file_name)

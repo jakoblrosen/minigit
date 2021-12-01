@@ -50,10 +50,17 @@ int main(int argc, char *argv[])
         switch (input_int)
         {
         case 1:
-            minigit.init(table_size);
-            initialized = true;
+            try
+            {
+                minigit.init(table_size);
+                initialized = true;
 
-            cout << "MiniGit initialized" << endl;
+                cout << "MiniGit initialized" << endl;
+            }
+            catch (const exception &e)
+            {
+                cout << e.what() << endl;
+            }
 
             break;
 
