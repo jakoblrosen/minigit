@@ -27,37 +27,53 @@ int main(int argc, char *argv[])
 
     string input_string;
     int input_int;
+    bool initialized = false;
     bool quit = false;
     while (!quit)
     {
         input_string = "";
         input_int = 0;
+        bool valid = false;
 
         displayMenu();
         getline(cin, input_string);
         cout << endl;
 
-        input_int = stoi(input_string);
+        input_string.find_first_not_of("0123456789") ? input_int = stoi(input_string) : input_int = -1;
+
+        if (!initialized && input_int != 1)
+        {
+            cout << "You have to initialize MiniGit before doing anything else!" << endl;
+            input_int = -1;
+        }
 
         switch (input_int)
         {
         case 1:
             minigit.init(table_size);
+            initialized = true;
+
+            cout << "MiniGit initialized" << endl;
 
             break;
 
         case 2:
-            cout << "Please enter the  path of the file you would like to add" << endl;
-
-            getline(cin, input_string);
-
-            try
+            while (!valid)
             {
-                minigit.add(input_string);
-            }
-            catch (const exception &e)
-            {
-                cout << "File path entered does not exist" << endl;
+                cout << "Please enter the  path of the file you would like to add" << endl;
+
+                getline(cin, input_string);
+
+                try
+                {
+                    minigit.add(input_string);
+                    valid = true;
+                    cout << "File successfully added" << endl;
+                }
+                catch (const exception &e)
+                {
+                    cout << e.what() << endl;
+                }
             }
 
             break;
@@ -70,28 +86,33 @@ int main(int argc, char *argv[])
             try
             {
                 minigit.rm(input_string);
+                cout << "File successfully removed" << endl;
             }
             catch (const exception &e)
             {
-                cout << "File not found in current commit" << endl;
+                cout << e.what() << endl;
             }
 
             break;
 
         case 4:
-            cout << "Please enter a commit message (about three words separated by spaces)" << endl;
-
-            getline(cin, input_string);
-
-            try
+            while (!valid)
             {
-                minigit.commit(input_string);
+                cout << "Please enter a commit message (between one and three words separated by spaces)" << endl;
+
+                getline(cin, input_string);
+
+                try
+                {
+                    string commit_id = minigit.commit(input_string);
+                    valid = true;
+                    cout << "Commit ID: " << commit_id << " has been committed" << endl;
+                }
+                catch (const exception &e)
+                {
+                    cout << e.what() << endl;
+                }
             }
-            catch(const exception& e)
-            {
-                cout << "Invalid commit message" << endl;
-            }
-            
 
             break;
 
@@ -106,7 +127,7 @@ int main(int argc, char *argv[])
             }
             catch (const exception &e)
             {
-                cout << "A commit with id \"" << input_string << "\" could not be found" << endl;
+                cout << e.what() << endl;
             }
 
             break;
