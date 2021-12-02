@@ -66,6 +66,16 @@ The *insert* function will take in a string *key* as well as an int *commit_num*
 
 The *search* function will return a *HashNode* struct that can be used to retrieve the *key* value as well as associated *commit_nums*. The hashing process used to search for a *HashNode* is the same process used to insert one, so if a *HashNode* with the specified *key* exists, it will be found. If there is no *HashNode* with the specified *key*, an exception is thrown and handled accordingly.
 
+## SHA-1 ##
+
+### Overview ###
+
+The hash table class utelizes a header-only implementation of the SHA-1 hashing algorithm. SHA-1 hashes are comprised of 20 bytes, or 40 hexadecimal digits. This leads to incredibly unique hashes as a result. In order to use the hashing function, initialize a new SHA-1 object, and then call the member function ```final(key)``` with a string key value. The output will be a string, so it will need to be converted into a decimal integer later.
+
+### Final ###
+
+The *final* function of the SHA-1 class is what causes all of the transformations to be applied to the digest, which is what the final hash is. The transformation process involves 40 rotations and other bitwise operations which are all reapeatable, but also very unique. This results in a very strong hashing algorithm with a low likelihood of collisions in a large enough table.
+
 ## Tests ##
 
 For running tests, navigate into the build directory and execute the command ```./run_tests```.
