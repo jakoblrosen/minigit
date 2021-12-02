@@ -178,7 +178,7 @@ string MiniGit::commit(string msg)
 
         if (word_count > 3)
         {
-            throw runtime_error("The commit message provided is invalid");
+            throw runtime_error("The commit message provided is too long");
         }
     }
 
@@ -195,28 +195,29 @@ string MiniGit::commit(string msg)
         }
     }
 
-    FileNode *version_crawler = commit_head->file_head;
-    while (version_crawler != nullptr)
+    // see if any of the files in the working commit have been changed, if so update their versions
+    FileNode *file_crawler = commit_head->file_head;
+    while (file_crawler != nullptr)
     {
         // check if file has changed
-        if (!compare_files(version_crawler->name, minigit_file_path(minigit_file_name(version_crawler->name, version_crawler->version), ".minigit/")))
+        if (!compare_files(file_crawler->name, minigit_file_path(minigit_file_name(file_crawler->name, file_crawler->version), ".minigit/")))
         {
             // see if source file still exists
-            if (!filesystem::exists(version_crawler->name))
+            if (!filesystem::exists(file_crawler->name))
             {
-                throw runtime_error("File \"" + version_crawler->name + "\" could not be found");
+                throw runtime_error("File \"" + file_crawler->name + "\" could not be found");
             }
             else
             {
-                version_crawler->version = get_next_version(version_crawler->name);
+                file_crawler->version = get_next_version(file_crawler->name);
             }
         }
 
-        version_crawler = version_crawler->next;
+        file_crawler = file_crawler->next;
     }
 
     // visit all file nodes for current commit to copy to .minigit/
-    FileNode *file_crawler = commit_head->file_head;
+    file_crawler = commit_head->file_head;
     while (file_crawler != nullptr)
     {
         filesystem::path in_path = file_crawler->name;
@@ -247,7 +248,7 @@ string MiniGit::commit(string msg)
 
     // prepare a new working commit
     BranchNode *node = new BranchNode;
-    node->commit_id = -1; // set commit_id to -1 to disallow the user from checking out the working commit
+    node->commit_id = commits + 1;
     node->file_head = nullptr;
     // copy over the SLL from the previous commit
     file_crawler = commit_head->file_head;
@@ -282,7 +283,7 @@ void MiniGit::checkout(string commit_id)
 
     if (commit_id.find_first_not_of("0123456789") != string::npos)
     {
-        throw runtime_error("The commit ID provided is not a valid commit ID");
+        throw runtime_error("The commit ID provided was invalid");
     }
 
     bool found = commit_crawler->commit_id == stoi(commit_id);
@@ -328,6 +329,7 @@ string MiniGit::minigit_file_name(string file_name, int version_num)
     int slash_index = file_name.find_last_of('/');
     string version = (version_num < 10) ? "0" + to_string(version_num) : to_string(version_num);
     out_file.append(file_name.substr(slash_index + 1, dot_index - (slash_index + 1)));
+    out_file.append("_");
     out_file.append(version);
     out_file.append(file_name.substr(dot_index));
 

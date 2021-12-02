@@ -14,7 +14,7 @@ To start using MiniGit, navigate to the "```build/```" directory by entering "``
 
 ### Init ###
 
-When initializing MiniGit, you will be asked to provide a size for the hash table. A smaller hash table will be less intensive on memory, however a larger hash table will reduce collisions and get you closer to a perfect O(1) search time. It is also recommended that you choose a prime number for your table size as these have been shown to reduce collisions.
+When initializing MiniGit, the hash table is set to 5 as a defualt. A smaller hash table will be less intensive on memory, while a larger hash table will reduce collisions and get you closer to a perfect O(1) search time. Prime numbers also tend to reduce collisions. In a future version, it can be implemented for the user to choose their own hash table size.
 
 ### Add ###
 
@@ -37,6 +37,8 @@ The *commit* function is what will store your changes in the .minigit/ directory
 The *checkout* function will restore files to the version that were part of the commit ID provided. This is a great way to look over your previous versions.
 
 **WARNING:** **This function will overwrite the files included in the commit. If you don't want to lose any work please save all of your files with a new commit and then checkout the older commit.**
+
+**NOTE:** *You will also need to checkout your most recent working commit in order to do anymore MiniGit operations.*
 
 ### Search ###
 
@@ -65,6 +67,16 @@ The *insert* function will take in a string *key* as well as an int *commit_num*
 ### Search ###
 
 The *search* function will return a *HashNode* struct that can be used to retrieve the *key* value as well as associated *commit_nums*. The hashing process used to search for a *HashNode* is the same process used to insert one, so if a *HashNode* with the specified *key* exists, it will be found. If there is no *HashNode* with the specified *key*, an exception is thrown and handled accordingly.
+
+## SHA-1 ##
+
+### Overview ###
+
+The hash table class utelizes a header-only implementation of the SHA-1 hashing algorithm. SHA-1 hashes are comprised of 20 bytes, or 40 hexadecimal digits. This leads to incredibly unique hashes as a result. In order to use the hashing function, initialize a new SHA-1 object, and then call the member function ```final(key)``` with a string key value. The output will be a string, so it will need to be converted into a decimal integer later.
+
+### Final ###
+
+The *final* function of the SHA-1 class is what causes all of the transformations to be applied to the digest, which is what the final hash is. The transformation process involves 40 rotations and other bitwise operations which are all reapeatable, but also very unique. This results in a very strong hashing algorithm with a low likelihood of collisions in a large enough table.
 
 ## Tests ##
 
