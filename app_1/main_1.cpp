@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         case 2:
             while (!valid)
             {
-                cout << "Please enter the  path of the file you would like to add" << endl;
+                cout << "Please enter the relative path of the file you would like to add" << endl;
 
                 getline(cin, input_string);
 
@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
                     valid = true;
                     cout << "Commit ID: " << commit_id << " has been committed" << endl;
                     working_commit = stoi(commit_id) + 1;
+                    current_commit = working_commit;
                 }
                 catch (const exception &e)
                 {
