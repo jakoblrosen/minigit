@@ -23,7 +23,7 @@ void displayMenu()
 int main(int argc, char *argv[])
 {
     MiniGit minigit;
-    int table_size = 10; // table_size may be entered by user
+    int table_size = 17; // table_size may be entered by user
 
     string input_string;
     int input_int;
@@ -59,6 +59,27 @@ int main(int argc, char *argv[])
         case 1:
             try
             {
+                while (!valid)
+                {
+                    cout << "Please enter a size for the hash table (default is 17)" << endl;
+                    getline(cin, input_string);
+
+                    if (input_string.empty())
+                    {
+                        // default table size
+                        table_size = 17;
+                        valid = true;
+                    }
+                    else if (input_string.find_first_not_of("0123456789") == string::npos)
+                    {
+                        table_size = stoi(input_string);
+                        valid = true;
+                    }
+                    else
+                    {
+                        cout << "Please only enter numerical digits" << endl;
+                    }
+                }
                 minigit.init(table_size);
                 initialized = true;
 
