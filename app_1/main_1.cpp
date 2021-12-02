@@ -23,7 +23,10 @@ void displayMenu()
 int main(int argc, char *argv[])
 {
     MiniGit minigit;
-    int table_size = 17; // table_size may be entered by user
+    int table_size = 5; // table_size capped at 5 for assignment
+
+    int working_commit = 0;
+    int current_commit = 0;
 
     string input_string;
     int input_int;
@@ -39,6 +42,7 @@ int main(int argc, char *argv[])
         getline(cin, input_string);
         cout << endl;
 
+        // catch non numerical inputs as invalid inputs
         if (!input_string.empty() && input_string.find_first_not_of("0123456789") == string::npos)
         {
             input_int = stoi(input_string);
@@ -48,9 +52,18 @@ int main(int argc, char *argv[])
             input_int = -1;
         }
 
+        // user must initialize minigit before doing anything else
         if (!initialized && input_int != 1)
         {
             cout << "You have to initialize MiniGit before doing anything else!" << endl;
+            input_int = -1;
+        }
+
+        // user cannot do anything other than checkout and search if they are not on the working commit
+        if (current_commit != working_commit && !(input_int == 5 || input_int == 6))
+        {
+            cout << "You cannot perform any MiniGit operations on a commit that is not your working commit" << endl;
+            cout << "Your working commit has ID: " << working_commit << endl;
             input_int = -1;
         }
 
@@ -59,27 +72,6 @@ int main(int argc, char *argv[])
         case 1:
             try
             {
-                while (!valid)
-                {
-                    cout << "Please enter a size for the hash table (default is 17)" << endl;
-                    getline(cin, input_string);
-
-                    if (input_string.empty())
-                    {
-                        // default table size
-                        table_size = 17;
-                        valid = true;
-                    }
-                    else if (input_string.find_first_not_of("0123456789") == string::npos)
-                    {
-                        table_size = stoi(input_string);
-                        valid = true;
-                    }
-                    else
-                    {
-                        cout << "Please only enter numerical digits" << endl;
-                    }
-                }
                 minigit.init(table_size);
                 initialized = true;
 
@@ -87,6 +79,7 @@ int main(int argc, char *argv[])
             }
             catch (const exception &e)
             {
+                // user tries to initialize minigit after it has already been initialized
                 cout << e.what() << endl;
             }
 
@@ -107,6 +100,7 @@ int main(int argc, char *argv[])
                 }
                 catch (const exception &e)
                 {
+                    // file was in the last commit, or the file couldn't be found
                     cout << e.what() << endl;
                 }
             }
@@ -125,6 +119,7 @@ int main(int argc, char *argv[])
             }
             catch (const exception &e)
             {
+                // file to remove couldn't be found in working commit
                 cout << e.what() << endl;
             }
 
@@ -142,9 +137,11 @@ int main(int argc, char *argv[])
                     string commit_id = minigit.commit(input_string);
                     valid = true;
                     cout << "Commit ID: " << commit_id << " has been committed" << endl;
+                    working_commit = stoi(commit_id) + 1;
                 }
                 catch (const exception &e)
                 {
+                    // commit message entered was invalid, or a file was deleted since adding it to the working commit
                     cout << e.what() << endl;
                 }
             }
@@ -153,15 +150,19 @@ int main(int argc, char *argv[])
 
         case 5:
             cout << "Please enter the id of the commit you would like to check out" << endl;
+            cout << "WARNING: Checking out a commit will overwrite the files included in that commit" << endl;
+            cout << "Please make sure that everything is backed up or saved in a new commit" << endl;
 
             getline(cin, input_string);
 
             try
             {
                 minigit.checkout(input_string);
+                current_commit = stoi(input_string); // this line will only be hit if the commit ID is valid
             }
             catch (const exception &e)
             {
+                // the commit ID entered was either invalid or could not be found
                 cout << e.what() << endl;
             }
 
