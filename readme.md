@@ -14,7 +14,7 @@ To start using MiniGit, navigate to the "```build/```" directory by entering "``
 
 ### Init ###
 
-When initializing MiniGit, you will be asked to provide a size for the hash table. A smaller hash table will be less intensive on memory, however a larger hash table will reduce collisions and get you closer to a perfect O(1) search time. It is also recommended that you choose a prime number for your table size as these have been shown to reduce collisions.
+When initializing MiniGit, the hash table is set to 5 as a defualt. A smaller hash table will be less intensive on memory, while a larger hash table will reduce collisions and get you closer to a perfect O(1) search time. Prime numbers also tend to reduce collisions. In a future version, it can be implemented for the user to choose their own hash table size.
 
 ### Add ###
 
@@ -37,6 +37,8 @@ The *commit* function is what will store your changes in the .minigit/ directory
 The *checkout* function will restore files to the version that were part of the commit ID provided. This is a great way to look over your previous versions.
 
 **WARNING:** **This function will overwrite the files included in the commit. If you don't want to lose any work please save all of your files with a new commit and then checkout the older commit.**
+
+**NOTE:** *You will also need to checkout your most recent working commit in order to do anymore MiniGit operations.*
 
 ### Search ###
 
