@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         }
 
         // user must initialize minigit before doing anything else
-        if (!initialized && input_int != 1)
+        if (!initialized && !(input_int == 1 || input_int == 7))
         {
             cout << "You have to initialize MiniGit before doing anything else!" << endl;
             input_int = -1;
