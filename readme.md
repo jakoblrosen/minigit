@@ -1,3 +1,93 @@
-# CSCI 2275 – Data Structures - Final Project
+# CSCI 2275 – Data Structures - Final Project #
 
-Please include a thorough description of your program's functionality. Imagine that you are publishing this for users who know nothing about this project. **Also, include the names of the team-members/authors**. 
+## Jakob Rosen ##
+
+## MiniGit ##
+
+### Overview ###
+
+The MiniGit class is meant to be a smaller version of the popular tool Git. The functionality included allows users to initialize the vcs for a new repository, stage changes for a commit, remove staged changes from a commit, commit the staged changes to save the changes to the files, checkout a previosly made commit, and search for commits using words from the commit message.
+
+### Usage ###
+
+To start using MiniGit, navigate to the "```build/```" directory by entering "```cd build/```" in your terminal. Next setup CMake in the build directory with the command, "```cmake ..```". Finally, complile the project with the command, "```make```" and run it with "```./run_app_1```". You can now use MiniGit! For further detail and instruction, keep reading about the MiniGit functions.
+
+### Init ###
+
+When initializing MiniGit, the hash table is set to 5 as a defualt. A smaller hash table will be less intensive on memory, while a larger hash table will reduce collisions and get you closer to a perfect O(1) search time. Prime numbers also tend to reduce collisions. In a future version, it can be implemented for the user to choose their own hash table size.
+
+### Add ###
+
+The *add* function is used to add files to a commit. Files added in previous commits will also be included in the current commit unless they are explicitly removed.
+
+**NOTE:** *Files from previous commits will have their changes automatically added. If you want to update these files in the current commit, you will need to add them as well.*
+
+### Remove ###
+
+The *rm* function will remove a file from your current commit so the changes will not be stored in .minigit.
+
+**NOTE:** *This function will not remove the source file from your filesystem, it will only stop the changes from being stored in .minigit.*
+
+### Commit ###
+
+The *commit* function is what will store your changes in the .minigit/ directory. You will also be asked to include a commit message. This should be a short and concise set of words that describe your commit. These words will also be used to store the commit num in the hash table for searching later.
+
+### Checkout ###
+
+The *checkout* function will restore files to the version that were part of the commit ID provided. This is a great way to look over your previous versions.
+
+**WARNING:** **This function will overwrite the files included in the commit. If you don't want to lose any work please save all of your files with a new commit and then checkout the older commit.**
+
+**NOTE:** *You will also need to checkout your most recent working commit in order to do anymore MiniGit operations.*
+
+### Search ###
+
+The *search* function will print the *commit_nums* associated a certain *key* word from a commit message. This is accomplished through the hash table *search* function.
+
+## Hash Table ##
+
+### Overview ###
+
+This hash table implementation uses the SHA-1 hashing algorithm which will turn a key value (in this case a string) into a 20 byte or 40 digit hexadecimal digest. This hash table will resolve collisions with chaining, allowing for a relatively small table size. 
+
+**NOTE:** *The table should not be too small, otherwise you lose the O(1) time complexity*
+
+### Constructor ###
+
+The constructor has an int parameter *bsize* which refers to the number of buckets in the hash table, or in other words the number of indexes. The underlying data structure used is a primitive array of *HashNode* pointers
+
+### Hash Function ###
+
+The *hash* function is the actual implementation of the SHA-1 hashing algorithm. The helper functions/operations for the hashing algorithm are defined in the header file to maintain readability and cleanliness. The input for this function is a string *key* and the output is a 40 digit hexadecimal string that is used by other functions to calculate indexes.
+
+### Insert ###
+
+The *insert* function will take in a string *key* as well as an int *commit_num*. The *key* value will be hashed to get the index that will be used to store *commit_num* in the table. This implementation of a hash table will resolve collisions through chaining, which allows for more data in a relatively small table. Each index in the array actually contains a linked list of the stored *keys* and *commit_nums*.
+
+### Search ###
+
+The *search* function will return a *HashNode* struct that can be used to retrieve the *key* value as well as associated *commit_nums*. The hashing process used to search for a *HashNode* is the same process used to insert one, so if a *HashNode* with the specified *key* exists, it will be found. If there is no *HashNode* with the specified *key*, an exception is thrown and handled accordingly.
+
+## SHA-1 ##
+
+### Overview ###
+
+The hash table class utelizes a header-only implementation of the SHA-1 hashing algorithm. SHA-1 hashes are comprised of 20 bytes, or 40 hexadecimal digits. This leads to incredibly unique hashes as a result. In order to use the hashing function, initialize a new SHA-1 object, and then call the member function ```final(key)``` with a string key value. The output will be a string, so it will need to be converted into a decimal integer later.
+
+### Final ###
+
+The *final* function of the SHA-1 class is what causes all of the transformations to be applied to the digest, which is what the final hash is. The transformation process involves 40 rotations and other bitwise operations which are all reapeatable, but also very unique. This results in a very strong hashing algorithm with a low likelihood of collisions in a large enough table.
+
+## Tests ##
+
+For running tests, navigate into the build directory and execute the command ```./run_tests```.
+
+### MiniGit Tests ###
+
+The MiniGit class has tests written for the *add* and *rm* functions. The tests test for expected outputs and exceptions given various inputs.
+
+### Hash Table Tests ###
+
+The hash table class has tests written to test the *hash* function, the *insert* function, and the *search* function. A write up for the derivation of the *insert* test cases can be found in the tests folder, entitled *test_insert_cases.txt*. The process starts with the SHA-1 hash of the key, followed by 4 bytes of the hash being selected for use in getting the index. These 4 bytes are converted to an unsigned int and then modded by the table size to get a usable index.
+
+
